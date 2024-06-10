@@ -1,6 +1,7 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 
+//Remove MongoDB password and NodeModule folder before pushing
 //Mongoose Connections
 import {} from "./models/db.js";
 

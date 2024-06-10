@@ -61,20 +61,17 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   #nav-search input{
     margin: 8px 0 8px 6px;
   }
-  
-  .btn-cart{
-    width: 90%;
-    margin: 5px;
-  }
   #main-banner{
     height: 250px;
+  }
+  .w-75{
+    width: 100%!important;
   }
   .navbar-brand h2{
     padding: 0!important;
   }
-  
-  .w-75{
-    width: 100%!important;
+  .btn-cart{
+    width: 90%;
+    margin: 5px;
   }
-  
 }
