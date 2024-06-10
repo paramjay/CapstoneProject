@@ -1,15 +1,14 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 
-//Remove MongoDB password and NodeModule folder before pushing
 //Mongoose Connections
 import {} from "./models/db.js";
 
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import resolvers from "./graphql/resolvers/resolvers.js";
 
-import { resolvers } from "./graphql/resolvers/resolvers.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
@@ -18,7 +17,8 @@ const typeDefs = fs.readFileSync(
   "utf-8",
 );
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs: gql(typeDefs), resolvers,  cors: true // Enable CORS
+});
 
 server.start().then(function () {
   server.applyMiddleware({ app, path: "/graphql", cors: true });
