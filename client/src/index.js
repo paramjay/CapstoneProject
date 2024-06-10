@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./images/logo1.png";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

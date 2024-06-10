@@ -37,6 +37,17 @@ footer{
 footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 20px;
 }
+#main-banner{
+  background: url('images/hero-banner.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 550px;
+}
+.product-img{
+ height: 300px;
+ width: auto;
+}
+
 /* tablet */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   #nav-search input{
@@ -48,7 +59,22 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
 /* mobile */
 @media only screen and (max-width: 768px) {
   #nav-search input{
-    /* display: none; */
     margin: 8px 0 8px 6px;
   }
+  
+  .btn-cart{
+    width: 90%;
+    margin: 5px;
+  }
+  #main-banner{
+    height: 250px;
+  }
+  .navbar-brand h2{
+    padding: 0!important;
+  }
+  
+  .w-75{
+    width: 100%!important;
+  }
+  
 }
