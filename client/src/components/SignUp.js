@@ -88,6 +88,7 @@ export default function SignUp() {
         alert(result.errors[0].message); // Display error message to the user
       } else {
         console.log("User registered:", result.data.registerUser);
+        alert("New User registered successfully");
         // Reset form after successful submission
         setFormData({
           username: "",

@@ -6,7 +6,7 @@ export default function NavBar() {
   return (
     <div id="header" className="border-bottom">
     <Navbar  expand="lg">
-      <Navbar.Brand><h2 className="mx-5 ps-5">Aspire</h2></Navbar.Brand>
+      <Navbar.Brand><h2 className="mx-5 ps-5"><a href="/" className="text-black text-decoration-none">Aspire</a></h2></Navbar.Brand>
       <Navbar.Toggle aria-controls="issue-navbar-nav" />
       <Navbar.Collapse id="issue-navbar-nav">
       <NavLink NavLink  title="Home-Page" className="nav-link p-2" to="/">Home</NavLink>

@@ -37,17 +37,32 @@ footer{
 footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 20px;
 }
+.col{
+  padding: 0;
+}
+#root{
+  overflow-x: hidden;
+}
 #main-banner{
   background: url('images/hero-banner.jpeg');
   background-size: cover;
   background-position: center;
   height: 550px;
 }
+#sale-banner{
+  background: url('images/banner3.png');
+  background-size: cover;
+  background-position: center;
+  height: 550px;
+  margin-top: 50px;
+}
 .product-img{
  height: 300px;
  width: auto;
 }
-
+.testimonial {
+  margin-bottom: 30px;
+}
 /* tablet */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   #nav-search input{
@@ -55,6 +70,7 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
     margin: 8px 0 8px 6px;
    /* display: none; */
   }
+  
 }
 /* mobile */
 @media only screen and (max-width: 768px) {
@@ -64,14 +80,36 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   #main-banner{
     height: 250px;
   }
-  .w-75{
-    width: 100%!important;
+  #sale-banner{
+    height: 200px;
+    margin-top: 20px;
+  }
+  .navbar-toggler.collapsed{
+    margin-right: 10px;
   }
   .navbar-brand h2{
     padding: 0!important;
+  }
+  .product-div.w-75{
+    width: 100%!important;
+    margin-bottom: 15px!important;
+  }
+  .product-div button{
+    /* margin: 10px !important; */
+    width: 130px;
   }
   .btn-cart{
     width: 90%;
     margin: 5px;
   }
+  #nav-search{
+    margin: auto;
+  }
+  #SignUp{
+    margin: 1rem!important;
+  }
+  .testimonial .testimonial-content {
+    padding-left: 0;
+  }
+  
 }

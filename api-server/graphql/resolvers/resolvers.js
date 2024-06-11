@@ -40,6 +40,11 @@ const resolvers = {
       if (existingUser) {
         throw new Error('User with this email already exists.');
       }
+      // Check if user with the same email already exists
+      const existingUser2 = await User.findOne({ username: input.username });
+      if (existingUser2) {
+        throw new Error('User with this username already exists.');
+      }
 
       // Hash the password
       const hashedPassword = bcrypt.hashSync(input.password, 10);

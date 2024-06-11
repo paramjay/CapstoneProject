@@ -57,7 +57,50 @@ export default function Main() {
               </div>
             </div>
           </section>
+          
+          <section id="sale-banner"></section>
 
+          <section id="review" className="mt-4">
+          <div className="container">
+            <h2 className="text-center mb-4">Reviews</h2>
+            <div className="row">
+              <div className="col-md-4">
+                <div className="testimonial">
+                  <div className="testimonial-content">
+                    <h4>Hrithik Roshan</h4>
+                    <p className="p-3 rounded-3 bg-body-secondary">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."</p>
+                    <i className="fa fa-thumbs-o-up m-3" aria-hidden="true"></i>
+                    <i className="fa fa-comments-o m-3" aria-hidden="true"></i>
+                    <i className="fa fa-share m-3 " aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="testimonial">
+                  <div className="testimonial-content">
+                    <h4>Kartik Aryan</h4>
+                    <p className="p-3 rounded-3 bg-body-secondary">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."</p>
+                    <i className="fa fa-thumbs-o-up m-3" aria-hidden="true"></i>
+                    <i className="fa fa-comments-o m-3" aria-hidden="true"></i>
+                    <i className="fa fa-share m-3 " aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="testimonial">
+                  <div className="testimonial-content">
+                    <h4>Disha Patani</h4>
+                    <p className="p-3 rounded-3 bg-body-secondary">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."</p>
+                    <i className="fa fa-thumbs-o-up m-3" aria-hidden="true"></i>
+                    <i className="fa fa-comments-o m-3" aria-hidden="true"></i>
+                    <i className="fa fa-share m-3 " aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </section>
+          
         </div>
   );
 }
