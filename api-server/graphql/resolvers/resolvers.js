@@ -2,61 +2,71 @@
 import { v4 as uuidv4 } from 'uuid';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-
-// Initialize empty users array
-let users = [];
+import { User } from "../../models/UserModel.js";
 
 // Define resolvers
 const resolvers = {
   Query: {
-    getUsers: () => users,
+    getUsers: async () => {
+      try {
+        const employees = await User.find({});
+        return employees;
+      } catch (error) {
+        throw new Error('Error fetching users');
+      }
+    },
   },
   Mutation: {
-    registerUser: (_, { username, email, password, firstName, lastName, phone, gender, dob, role, address }) => {
+    registerUser: async (_, { input }) => {
+      console.log(input);
+
       // Validate input fields
-      if (!username || !email || !password || !firstName || !lastName || !phone || !gender || !dob || !role) {
-        throw new Error("All fields are required.");
+      if (!input.username || !input.email || !input.password || !input.firstName || !input.lastName || !input.phone || !input.gender || !input.dob || !input.role) {
+        throw new Error('All fields are required.');
       }
 
       // Validate email format
-      if (!validator.isEmail(email)) {
-        throw new Error("Invalid email format.");
+      if (!validator.isEmail(input.email)) {
+        throw new Error('Invalid email format.');
       }
 
       // Validate phone number format
-      if (!validator.isMobilePhone(phone, 'any', { strictMode: false })) {
-        throw new Error("Invalid phone number format.");
+      if (!validator.isMobilePhone(input.phone, 'any', { strictMode: false })) {
+        throw new Error('Invalid phone number format.');
       }
 
       // Check if user with the same email already exists
-      const existingUser = users.find(user => user.email === email);
+      const existingUser = await User.findOne({ email: input.email });
       if (existingUser) {
-        throw new Error("User with this email already exists.");
+        throw new Error('User with this email already exists.');
       }
 
       // Hash the password
-      const hashedPassword = bcrypt.hashSync(password, 10);
+      const hashedPassword = bcrypt.hashSync(input.password, 10);
 
       // Create new user
-      const newUser = {
+      const newUser = new User({
         id: uuidv4(),
-        username,
-        email,
+        username: input.username,
+        email: input.email,
         password: hashedPassword,
-        firstName,
-        lastName,
-        phone,
-        gender,
-        dob,
-        role,
-        address,
-      };
+        firstName: input.firstName,
+        lastName: input.lastName,
+        phone: input.phone,
+        gender: input.gender,
+        dob: new Date(input.dob),
+        role: input.role,
+        address: input.address,
+      });
 
-      // Push new user to the users array
-      users.push(newUser);
-      
-      // Return the newly created user
-      return newUser;
+      try {
+        console.log('Attempting to save new user:', newUser);
+        await newUser.save();
+        return newUser;
+      } catch (error) {
+        console.error('Error creating user:', error);
+        throw new Error(`Error creating user: ${error.message}`);
+      }
     },
   },
 };

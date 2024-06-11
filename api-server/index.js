@@ -17,8 +17,7 @@ const typeDefs = fs.readFileSync(
   "utf-8",
 );
 
-const server = new ApolloServer({ typeDefs: gql(typeDefs), resolvers,  cors: true // Enable CORS
-});
+const server = new ApolloServer({ typeDefs, resolvers });
 
 server.start().then(function () {
   server.applyMiddleware({ app, path: "/graphql", cors: true });
