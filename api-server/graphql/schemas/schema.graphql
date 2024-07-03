@@ -25,10 +25,40 @@ input RegisterUserInput {
   address: String
 }
 
+
+
+
+type Product {
+  id: ID!
+  category: String!
+  subCategory: String!
+  name: String!
+  brand: String!
+  stock: String!
+  size: String!
+  price: String!
+  salePrice: String!
+  description: String
+}
+
+input RegisterProductInput {
+  category: String!
+  subCategory: String!
+  name: String!
+  brand: String!
+  stock: String!
+  size: String!
+  price: String!
+  salePrice: String!
+  description: String
+}
+
 type Query {
-  getUsers: [User]
+  getUsers: [User],
+  getProducts: [Product]
 }
 
 type Mutation {
-  registerUser(input: RegisterUserInput!): User
+  registerUser(input: RegisterUserInput!): User,
+  registerProduct(input: RegisterProductInput!): Product
 }

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import { User } from "../../models/UserModel.js";
+import { Product } from "../../models/ProductModel.js";
 
 // Define resolvers
 const resolvers = {
@@ -15,6 +16,14 @@ const resolvers = {
         throw new Error('Error fetching users');
       }
     },
+    getProducts: async () => {
+      try {
+        const products = await Product.find({});
+        return products;
+      } catch (error) {
+        throw new Error('Error fetching products');
+      }
+    }
   },
   Mutation: {
     registerUser: async (_, { input }) => {
@@ -73,6 +82,37 @@ const resolvers = {
         throw new Error(`Error creating user: ${error.message}`);
       }
     },
+    registerProduct: async (_, { input }) => {
+      console.log(input);
+
+      // Validate input fields
+      if (!input.category || !input.subCategory || !input.name || !input.brand || !input.stock || !input.size || !input.price || !input.salePrice) {
+        throw new Error('All fields except description are required.');
+      }
+
+      // Create new product
+      const newProduct = new Product({
+        id: uuidv4(),
+        category: input.category,
+        subCategory: input.subCategory,
+        name: input.name,
+        brand: input.brand,
+        stock: input.stock,
+        size: input.size,
+        price: input.price,
+        salePrice: input.salePrice,
+        description: input.description,
+      });
+
+      try {
+        console.log('Attempting to save new product:', newProduct);
+        await newProduct.save();
+        return newProduct;
+      } catch (error) {
+        console.error('Error creating product:', error);
+        throw new Error(`Error creating product: ${error.message}`);
+      }
+    }
   },
 };
 
