@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   dob: { type: Date, required: true },
   role: { type: String, required: true },
   address: { type: String, required: true },
+  isActive: { type: Boolean,  required: true, default: true },
 });
 
 export const User = mongoose.model("User", UserSchema);

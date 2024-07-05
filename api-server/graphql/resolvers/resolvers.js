@@ -112,7 +112,28 @@ const resolvers = {
         console.error('Error creating product:', error);
         throw new Error(`Error creating product: ${error.message}`);
       }
-    }
+    },
+    removeProduct: async (_, { id }) => {
+      const product = await Product.find({ id });
+      const removedProduct = await Product.findOneAndDelete({ id });
+      return "Product '"+removedProduct.name+"' Deleted Successfully";
+    },
+    removeUser: async (_, { id }) => {
+      const user = await User.find({ id });
+      const removedUser = await User.findOneAndDelete({ id });
+      return "User '"+removedUser.username+"' Deleted Successfully";
+    },
+    deactivateUser: async (_, { id }) => {
+      const user = await User.find({ id });
+      const updatedUser = await User.findOneAndUpdate(
+        { id }, 
+        { $set: { isActive: false } }, 
+        { new: true }
+      );
+      return "User '"+updatedUser.username+"' Deactivated Successfully";
+    },
+    
+    
   },
 };
 

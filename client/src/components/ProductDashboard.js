@@ -1,12 +1,38 @@
 import React, { useState,useEffect } from "react";
 import { Table, Button, Container } from "react-bootstrap";
+import { graphQLCommand,DeleteProduct } from "../utils";
 
 
 export default function ProductDashboard() {
     
+  const [products, setProducts] = useState([]);
+    const fetchData = async () => {
+        const query = `query GetProducts {
+            getProducts {
+                id
+                category
+                subCategory
+                name
+                brand
+                stock
+                size
+                price
+                salePrice
+                description
+            }
+            }`;
+        
+        const data = await graphQLCommand(query);
+        setProducts(data.getProducts);
+      };
+    useEffect(() => {
+        //get date from server
+        fetchData();
+      }, []);
     return (
         <Container>
             <h1 className="mt-3 mb-3">Product Dashboard</h1>
+
             <Table id="userTable" striped bordered hover responsive>
                 <thead>
                     <tr>
@@ -22,41 +48,31 @@ export default function ProductDashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>Email</td>
-                    <td>Phone</td>
-                    <td>Gender</td>
-                    <td>DOB</td>
-                    <td><Button variant="outline-danger" size="sm">Delete</Button></td>
-                    </tr>
-                    <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>Email</td>
-                    <td>Phone</td>
-                    <td>Gender</td>
-                    <td>DOB</td>
-                    <td><Button variant="outline-danger" size="sm">Delete</Button></td>
-                    </tr>
-                    <tr>
-                    <td>3</td>
-                    <td >Larry</td>
-                    <td >Bird</td>
-                    <td>@twitter</td>
-                    <td>Email</td>
-                    <td>Phone</td>
-                    <td>Gender</td>
-                    <td>DOB</td>
-                    <td><Button variant="outline-danger" size="sm">Delete</Button></td>
-                    </tr>
+                    {products.map((singleRow) => (
+                        <ProductRows row={singleRow} key={singleRow.id} fetchData={fetchData} deleteProduct={DeleteProduct}/>
+                    ))}
                 </tbody>
             </Table>
         </Container>
     )
 };
+function ProductRows(props){
+    const removeProduct = async (_) => {
+        var data = await props.deleteProduct(props.row.id);
+        alert(data.removeProduct);
+        props.fetchData();
+    };
+    return(<tr>
+    <td>{props.row.id}</td>
+    <td>{props.row.category}</td>
+    <td>{props.row.name}</td>
+    <td>{props.row.brand}</td>
+    <td>{props.row.stock}</td>
+    <td>{props.row.size}</td>
+    <td>{props.row.price}</td>
+    <td>{props.row.salePrice}</td>
+    <td><Button variant="outline-danger" size="sm" onClick={removeProduct}>Delete</Button>
+    <Button variant="outline-primary" size="sm" >Edit</Button></td>
+    </tr>
+    )
+}

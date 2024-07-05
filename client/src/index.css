@@ -63,6 +63,16 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
 .testimonial {
   margin-bottom: 30px;
 }
+.loginDiv{
+  padding: 3rem ;
+  margin: 3rem ;
+}
+.loginCard{
+  width: 50%;
+}
+td button{
+  margin: 2px;
+}
 /* tablet */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   #nav-search input{
@@ -111,5 +121,13 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   .testimonial .testimonial-content {
     padding-left: 0;
   }
+  .loginCard{
+    width: 100%;
+  }
+  
+.loginDiv{
+  padding: 2rem ;
+  margin: 2px ;
+}
   
 }

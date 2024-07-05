@@ -284,6 +284,8 @@ export default function SignUp() {
               Register
             </Button>
           </div>
+          
+          <div className="text-center mt-3"><span>Already have an account? <a href="/Login">Login</a></span></div>
         </form>
       </div>
     </Container>

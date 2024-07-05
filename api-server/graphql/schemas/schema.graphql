@@ -10,6 +10,7 @@ type User {
   dob: String!
   role: String!
   address: String
+  isActive: Boolean
 }
 
 input RegisterUserInput {
@@ -24,8 +25,6 @@ input RegisterUserInput {
   role: String!
   address: String
 }
-
-
 
 
 type Product {
@@ -61,4 +60,7 @@ type Query {
 type Mutation {
   registerUser(input: RegisterUserInput!): User,
   registerProduct(input: RegisterProductInput!): Product
+  removeUser(id: String!): String
+  removeProduct(id: String!): String
+  deactivateUser(id: String!): String
 }
