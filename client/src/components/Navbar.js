@@ -4,11 +4,11 @@ import { Navbar,Form,Row,Col,Button } from "react-bootstrap";
 
 export default function NavBar() {
   return (
-    <div id="header" className="border-bottom">
+    <div id="header" className="border-bottom text-white">
     <Navbar  expand="lg">
-      <Navbar.Brand><h2 className="mx-5 ps-5"><a href="/" className="text-black text-decoration-none">Aspire</a></h2></Navbar.Brand>
-      <Navbar.Toggle aria-controls="issue-navbar-nav" />
-      <Navbar.Collapse id="issue-navbar-nav">
+      <Navbar.Brand><h2 className="mx-5 ps-5"><a href="/" className="text-white text-decoration-none">Aspire</a></h2></Navbar.Brand>
+      <Navbar.Toggle aria-controls="issue-navbar-nav" className="text-bg-light"/>
+      <Navbar.Collapse id="issue-navbar-nav" className="">
       <NavLink NavLink  title="Home-Page" className="nav-link p-2" to="/">Home</NavLink>
       <NavLink NavLink  title="Add Product" className="nav-link p-2" to="/AddProduct">Add Product</NavLink>
       <div className="w-75">
