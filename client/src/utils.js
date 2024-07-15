@@ -47,3 +47,23 @@ export const DeleteProduct = async (id) => {
     let data = await graphQLCommand(query, { removeProductId: id });
     return data;
 };
+export const UserLogin = async (username,password) => {
+  const query = `query LoginAuth($input: LoginInput!) {
+                  loginAuth(input: $input) {
+                    id
+                    username
+                    email
+                    password
+                    firstName
+                    lastName
+                    phone
+                    gender
+                    dob
+                    role
+                    address
+                    isActive
+                  }
+                }`;
+  let data = await graphQLCommand(query, { input: {username,password} });
+  return data.loginAuth;
+};

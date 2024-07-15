@@ -1,15 +1,19 @@
 import React from "react";
 import { useState } from "react";
 import { Card,Button,Form,Row,Col } from 'react-bootstrap';
+import { UserLogin } from "../utils";
+import {  useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login(props) {
+    
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
   
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      console.log("Username:", username);
-      console.log("Password:", password);
+    const Authentication =  async (e) => {
+      const userData = await UserLogin(username,password);
+      props.setLoggedInUser(userData);
+      navigate("/");
     };
   return <>
     <div className=" loginDiv">
@@ -25,7 +29,9 @@ export default function Login() {
                             Username
                             </Form.Label>
                             <Col  md={8} lg={8} xs={6}>
-                                <Form.Control type="text" placeholder="Enter you username" />
+                                <Form.Control type="text" value={username} 
+                                    onChange={(e) => setUsername(e.target.value)} 
+                                    placeholder="Enter you username" />
                             </Col>
                         </Form.Group>
 
@@ -34,11 +40,13 @@ export default function Login() {
                             Password
                             </Form.Label>
                             <Col md={8} lg={8} xs={6}>
-                                <Form.Control type="password" placeholder="Password" />
+                                <Form.Control type="password"  value={password} 
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Password" />
                             </Col>
                         </Form.Group>
                     </Form>
-                    <div className="text-center"><Button className="mb-3" variant="primary">Login</Button></div>
+                    <div className="text-center"><Button className="mb-3" onClick={Authentication} variant="primary">Login</Button></div>
                     <div className="text-center"><span>Don't have an account? <a href="/SignUp">SignUp</a></span></div>
                 </Card.Body>
             </Card>

@@ -52,9 +52,15 @@ input RegisterProductInput {
   description: String
 }
 
+input LoginInput {
+  username: String!
+  password: String!
+}
+
 type Query {
   getUsers: [User],
-  getProducts: [Product]
+  getProducts: [Product],
+  loginAuth(input: LoginInput!): User,
 }
 
 type Mutation {

@@ -1,36 +1,51 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import Main from "./components/Main";
 import SignUp from "./components/SignUp";
 import AddProduct from "./components/AddProduct";
 import UserDashboard from "./components/UserDashboard";
 import ProductDashboard from "./components/ProductDashboard";
 import Login from "./components/Login";
-
-import { Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "./components/NotFound";
+
 import NavBar from "./components/Navbar";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 
 function App() {
+  
+  const [LoggedInUser, setLoggedInUser] = useState([]);
+  useEffect(() => {
+    console.log(LoggedInUser)
+  }, [LoggedInUser]);
   return (
-    <>
     <>
       <Row>
         <Col>
-          <NavBar />
+          <NavBar LoggedInUser={LoggedInUser} />
         </Col>
       </Row>
-      
       <Row>
         <Col>
           <Routes>
             {/* Redirect */}
             <Route path="/" element={<Navigate replace to="/Home" />} />
-            <Route path="Login" element={<Login />}/>
+            <Route path="Login" element={<Login LoggedInUser={LoggedInUser} setLoggedInUser={setLoggedInUser} />}/>
             <Route path="SignUp" element={<SignUp />}/>
-            <Route path="AddProduct" element={<AddProduct />}/>
-            <Route path="UserDashboard" element={<UserDashboard />}/>
-            <Route path="ProductDashboard" element={<ProductDashboard />}/>
+            {LoggedInUser.role === "Admin" ? (
+                <>
+                  <Route path="AddProduct" element={<AddProduct />}/>
+                  <Route path="UserDashboard" element={<UserDashboard />}/>
+                  <Route path="ProductDashboard" element={<ProductDashboard />}/>
+                </>
+              ) : LoggedInUser.role === "Buyer" ? (
+                <>
+                  <Route path="Product" element={<AddProduct />}/>
+                  <Route path="Wish-list" element={<UserDashboard />}/>
+                  {/* <Route path="ProductDashboard" element={<ProductDashboard />}/> */}
+                </>
+              ) :(<></>)
+            }
+            
             {/* Nested */}
             <Route path="/Home">
               <Route index element={<Main />} />
@@ -41,7 +56,6 @@ function App() {
           </Routes>
         </Col>
       </Row>
-    </>
     </>
   );
 }

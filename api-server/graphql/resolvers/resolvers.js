@@ -23,6 +23,25 @@ const resolvers = {
       } catch (error) {
         throw new Error('Error fetching products');
       }
+    },
+    loginAuth: async (_, { input }) => {
+      try {
+        // console.log("Get-data-from-Request");
+        // console.log(input);
+        const user = await User.find({username:input.username});
+        // console.log("User-Found");
+        // console.log(user);
+        return user[0];
+        // if(user.length>0){
+        //   console.log("User-Found");
+        //   return user;
+        // }else{
+        //   console.log("User-NotFound");
+        //   return null;
+        // }
+      } catch (error) {
+        throw new Error('Error fetching products');
+      }
     }
   },
   Mutation: {
