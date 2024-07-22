@@ -33,6 +33,10 @@ export default function UserDashboard() {
       }, []);
     return (
         <Container className="mb-5">
+            <div className="mt-4 ">
+                <a className="m-2 btn btn-outline-primary " href="/ProductDashboard">Products</a>
+                <a className="m-2 btn btn-outline-primary  active" href="/UserDashboard">Users</a>
+            </div>
             <h1 className="mt-3 mb-3">User Dashboard</h1>
             <Table id="userTable" striped bordered hover responsive>
                 <thead>

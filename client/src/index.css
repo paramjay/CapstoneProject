@@ -54,6 +54,16 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
 #root{
   overflow-x: hidden;
 }
+#SignUp{
+  background: linear-gradient(to right, #00000060, #00000093), url('images/signup-bg\ \(2\).jpg');
+  /* background: url('images/signup-bg\ \(2\).jpg'); */
+  background-size: cover;
+  background-position: center;
+}
+.signupCard{
+  background: #000000a1!important;
+  color: white!important;
+}
 #main-banner{
   display: none;
   background: url('images/main-banner1.png');
@@ -192,9 +202,12 @@ footer .menu-item a:hover{
   }
   #nav-search{
     margin: auto;
+    float: none !important;
   }
   #SignUp{
-    margin: 1rem!important;
+    
+    background: linear-gradient(to right, #5d80ff92, #917373);
+    /* margin: 1rem!important; */
   }
   .testimonial .testimonial-content {
     padding-left: 0;

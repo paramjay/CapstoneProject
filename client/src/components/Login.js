@@ -14,6 +14,7 @@ export default function Login(props) {
     const Authentication =  async (e) => {
       const userData = await UserLogin(username,password);
       if(userData!=null){
+        localStorage.setItem('token', JSON.stringify(userData));
         props.setLoggedInUser(userData);
         navigate("/");
       }

@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Table, Button, Container } from "react-bootstrap";
+import { Table, Button, Container,Row,Col } from "react-bootstrap";
 import { graphQLCommand,DeleteProduct } from "../utils";
 
 
@@ -30,9 +30,18 @@ export default function ProductDashboard() {
         fetchData();
       }, []);
     return (
-        <Container>
-            <h1 className="mt-3 mb-3">Product Dashboard</h1>
-
+        <Container id="productDashboard">
+            <div className="mt-4 ">
+                <a className="m-2 btn btn-outline-primary active" href="/ProductDashboard">Products</a>
+                <a className="m-2 btn btn-outline-primary " href="/UserDashboard">Users</a>
+            </div>
+            
+            <Row> <Col><h1 className="mt-3 mb-3">Product Dashboard</h1> </Col>
+                <Col>
+                <a className="mt-4 btn btn-outline-info float-end" href="/AddProduct">Add
+                <i className="ms-1 fa fa-plus"></i></a>
+                </Col>
+            </Row>
             <Table id="userTable" striped bordered hover responsive>
                 <thead>
                     <tr>

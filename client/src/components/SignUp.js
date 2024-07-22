@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Form, Button, Container } from "react-bootstrap";
+import logoImg  from "./../images/logo1.png";
 
 const REGISTER_USER_MUTATION = `
   mutation RegisterUser($input: RegisterUserInput!) {
@@ -112,182 +113,203 @@ export default function SignUp() {
 
 
   return (
-    <Container>
-      <div id="SignUp" className="card card-body p-4 m-5">
-        <h3 className="text-center mb-4">Registration Form</h3>
-        <form id="SignUpForm" onSubmit={handleSubmit}>
-          <Row>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_username">
-                <Form.Label>Username:</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_email">
-                <Form.Label>Email:</Form.Label>
-                <Form.Control
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_password">
-                <Form.Label>Password:</Form.Label>
-                <Form.Control
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_repeat_password">
-                <Form.Label>Repeat password:</Form.Label>
-                <Form.Control
-                  type="password"
-                  id="repeatPassword"
-                  name="repeatPassword"
-                  value={formData.repeatPassword}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_firstName">
-                <Form.Label>First Name:</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_lastName">
-                <Form.Label>Last Name:</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_phone">
-                <Form.Label>Phone:</Form.Label>
-                <Form.Control
-                  type="number"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_gender">
-                <Form.Label>Gender:</Form.Label>
-                <Form.Select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_dob">
-                <Form.Label>Date of Birth:</Form.Label>
-                <Form.Control
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_role">
-                <Form.Label>Role:</Form.Label>
-                <Form.Select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select Role</option>
-                  <option value="Buyer">Buyer</option>
-                  <option value="Seller">Seller</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="form_address">
-                <Form.Label>Address:</Form.Label>
-                <Form.Control
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  as="textarea"
-                  rows={3}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <div className="button-div mt-3 text-center">
-            <Button variant="primary" type="submit">
-              Register
-            </Button>
+    <div id="SignUp" className=" p-4">
+      <Row>
+        <Col md={3} lg={3} sm={0}>
+        </Col>                               
+        <Col md={6} lg={6} sm={12}>
+        <div className="card card-body rounded-5 signupCard p-4">
+          <div className="text-center">
+          <img className="login-logo-img m-3 text-center" src={logoImg} alt="logo-Aspire" />
+          </div>     
+          <h3 className="text-center mb-4">Registration Form</h3>
+          <form id="SignUpForm" onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_username">
+                  <Form.Label>Username:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_email">
+                  <Form.Label>Email:</Form.Label>
+                  <Form.Control
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_password">
+                  <Form.Label>Password:</Form.Label>
+                  <Form.Control
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_repeat_password">
+                  <Form.Label>Repeat password:</Form.Label>
+                  <Form.Control
+                    type="password"
+                    id="repeatPassword"
+                    name="repeatPassword"
+                    value={formData.repeatPassword}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_firstName">
+                  <Form.Label>First Name:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_lastName">
+                  <Form.Label>Last Name:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_phone">
+                  <Form.Label>Phone:</Form.Label>
+                  <Form.Control
+                    type="number"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_gender">
+                  <Form.Label>Gender:</Form.Label>
+                  <Form.Select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_dob">
+                  <Form.Label>Date of Birth:</Form.Label>
+                  <Form.Control
+                    type="date"
+                    id="dob"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} lg={6} xs={12}>
+                <Form.Group className="mb-3" controlId="form_role">
+                  <Form.Label>Role:</Form.Label>
+                  <Form.Select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Role</option>
+                    <option value="Buyer">Buyer</option>
+                    <option value="Seller">Seller</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Group className="mb-3" controlId="form_address">
+                  <Form.Label>Address:</Form.Label>
+                  <Form.Control
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    as="textarea"
+                    rows={3}
+                    required
+                  />
+                </Form.Group>
+              </Col>
+              
+            </Row>
+            <div className="button-div mt-3 text-center">
+              <Button variant="primary" type="submit">
+                Register
+              </Button>
+            </div>
+            
+            <div className="text-center mt-3"><span>Already have an account? <a href="/Login">Login</a></span></div>
+          </form>
+          <div className="login-social-icons">
+                        <i	className="fa fa-google-plus-square"></i>
+                        <i	className="fa fa-instagram"></i>
+                        <i	className="fa fa-facebook-square"></i>
+                        <i	className="fa fa-youtube-play"></i>
+                        <i	className="fa fa-twitter-square"></i>
           </div>
-          
-          <div className="text-center mt-3"><span>Already have an account? <a href="/Login">Login</a></span></div>
-        </form>
-      </div>
-    </Container>
+        </div>
+        </Col>
+        
+        <Col md={3} lg={3} sm={0}>
+        </Col>        
+      </Row>
+     
+    </div>
   );
 }

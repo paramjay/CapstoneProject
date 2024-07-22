@@ -13,12 +13,18 @@ import { Row, Col } from "react-bootstrap";
 
 function App() {
   const Logout=()=>{
+    localStorage.removeItem('token');
     setLoggedInUser([]);
   }
   const [LoggedInUser, setLoggedInUser] = useState([]);
   useEffect(() => {
-    console.log(LoggedInUser)
-  }, [LoggedInUser]);
+    const data = localStorage.getItem('token');
+    console.log(JSON.parse(data));
+    if(data){
+    setLoggedInUser(JSON.parse(data));
+    }
+    // console.log(LoggedInUser);
+  }, []);
   return (
     <>
       <Row>
