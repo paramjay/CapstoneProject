@@ -19,8 +19,8 @@ export default function NavBar(props) {
         </>
       ) : props.LoggedInUser.role === "Buyer" ? (
         <>
-        <NavLink NavLink  title="Wish-List" className="nav-link p-2" to="/ProductDashboard">WishList</NavLink>
-        <NavLink NavLink  title="Cart" className="nav-link p-2" to="/UserDashboard">Cart</NavLink>
+              <NavLink className="nav-link p-2" to="/Wish-list">Wishlist</NavLink>
+              <NavLink NavLink  title="Cart" className="nav-link p-2" to="/Cart">Cart</NavLink>
         </>
        ) : (<></>)}
        <div className="w-100">

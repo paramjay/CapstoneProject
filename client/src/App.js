@@ -6,6 +6,10 @@ import UserDashboard from "./components/UserDashboard";
 import ProductDashboard from "./components/ProductDashboard";
 import Login from "./components/Login";
 import NotFound from "./components/NotFound";
+import Cart from "./components/Cart";
+import Wishlist from "./components/Wishlist";
+
+
 
 import NavBar from "./components/Navbar";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -48,7 +52,9 @@ function App() {
               ) : LoggedInUser.role === "Buyer" ? (
                 <>
                   <Route path="Product" element={<AddProduct />}/>
-                  <Route path="Wish-list" element={<UserDashboard />}/>
+                  <Route path="Wish-list" element={<Wishlist />} />
+                  <Route path="Cart" element={<Cart />} />
+
                   {/* <Route path="ProductDashboard" element={<ProductDashboard />}/> */}
                 </>
               ) :(<></>)
