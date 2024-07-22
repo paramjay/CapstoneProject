@@ -16,6 +16,16 @@
   --swiper-theme-color:       #4A4A4A;
   --swiper-pagination-color:  #4A4A4A;
 
+
+}
+
+.nav-link{
+  text-align: center;
+}
+.nav-link:hover{
+font-size: 1.2rem;
+text-shadow: 1px 1px 1px rgb(179, 179, 179);
+border-radius: 5px;
 }
 .social-links svg {
   width: 20px;
@@ -45,10 +55,16 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   overflow-x: hidden;
 }
 #main-banner{
-  background: url('images/hero-banner.jpeg');
+  display: none;
+  background: url('images/main-banner1.png');
   background-size: cover;
   background-position: center;
-  height: 550px;
+  height: 700px;
+}
+.banner-img{
+  background-size: cover;
+  background-position: center;
+  height: 500px;
 }
 #sale-banner{
   background: url('images/banner3.png');
@@ -64,8 +80,40 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
 .testimonial {
   margin-bottom: 30px;
 }
+.loginCard {
+  background: #000000a1!important;
+  color: white!important;
+  width: 80%;
+  margin: auto;
+}
+.search-box-div{
+  /* width: 20rem!important; */
+  /* position: absolute; */
+  /* right: 170px; */
+  /* top: 16px; */
+}
+.login-control{
+  /* height: 3rem; */
+  font-size: 1.2rem!important;
+  border: 1px solid rgb(142, 142, 142);
+  border-radius: 5px;
+}
+.login-logo-img{
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+}
+.login-social-icons {
+  margin: 2rem 0 1rem 0;
+  font-size: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+.btn-login{
+width: 97%;
+}
 .loginDiv{
-  background: linear-gradient(to right, #00000074, #00000074), url('images/login-bg.jpg');
+  background: linear-gradient(to right, #00000074, #00000074), url('images/login-banner2.jpg');
   /* background: url(''); */
   background-size: cover;
   background-position: center;
@@ -95,14 +143,30 @@ footer .menu-item a:hover{
    /* display: none; */
   }
   
+.loginCard {
+  width: 100%;
+}
+  
+  #main-banner{
+    height: 480px;
+  }
+  
+  .search-box{
+    display: none!important; 
+  }
+  
 }
 /* mobile */
 @media only screen and (max-width: 768px) {
+  #carousel-section{
+    display: none;
+  }
   #nav-search input{
     margin: 8px 0 8px 6px;
   }
   #main-banner{
-    height: 250px;
+    display: block;
+    height: 300px;
   }
   #sale-banner{
     height: 200px;
@@ -140,8 +204,14 @@ footer .menu-item a:hover{
   }
   
   .loginDiv{
-    background: linear-gradient(to right, #00000092, #ffffff);
+    background: linear-gradient(to right, #5d80ff92, #917373);
     padding: 2rem ;
+  }
+  .nav-link:hover{
+  background-color: #ffffff66;
+  }
+  .search-box{
+    display: none!important; 
   }
   
 }

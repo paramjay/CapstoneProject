@@ -26,20 +26,20 @@ const resolvers = {
     },
     loginAuth: async (_, { input }) => {
       try {
-        // console.log("Get-data-from-Request");
-        // console.log(input);
         const user = await User.find({username:input.username});
-        // console.log("User-Found");
-        // console.log(user);
-        return user[0];
-        // if(user.length>0){
-        //   console.log("User-Found");
-        //   return user;
-        // }else{
-        //   console.log("User-NotFound");
-        //   return null;
-        // }
+        if (user){
+          const match = await bcrypt.compare(input.password, user[0].password);
+          if (match) {
+            return user[0];
+          } else {
+            return  null;
+          }
+        }else{
+          console.log("User-Not-Found");
+          return "user-not-found";
+        }
       } catch (error) {
+        console.log("error",error);
         throw new Error('Error fetching products');
       }
     }
@@ -75,14 +75,18 @@ const resolvers = {
       }
 
       // Hash the password
-      const hashedPassword = bcrypt.hashSync(input.password, 10);
+      // let hashedPassword 
+      // bcrypt.hash(input.password, 10, (error, hash) => {
+      //   hashedPassword = hash;
+      // });
+      // const hashedPassword = bcrypt.hash(input.password, 10);
 
       // Create new user
       const newUser = new User({
         id: uuidv4(),
         username: input.username,
         email: input.email,
-        password: hashedPassword,
+        password: input.password,
         firstName: input.firstName,
         lastName: input.lastName,
         phone: input.phone,

@@ -1,12 +1,31 @@
 import React from "react";
+import Carousel from 'react-bootstrap/Carousel';
 import p1  from "./../images/p1.jpg";
 import p2  from "./../images/p2.jpg";
 import p3  from "./../images/p3.jpg";
+
+import banner1  from "./../images/main-banner1.png";
+import banner2  from "./../images/main-banner2.png";
+import banner3  from "./../images/main-banner3.png";
+
 
 export default function Main() {
   return (
         <div className="" id="Main">
           <section id="main-banner"></section>
+          <section id="carousel-section">
+          <Carousel className="bg-secondary text-center">
+            <Carousel.Item>
+              <img className="banner-img " src={banner1} alt="My Image" />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img className="banner-img " src={banner2} alt="My Image" />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img className="banner-img " src={banner3} alt="My Image" />
+            </Carousel.Item>
+          </Carousel>
+          </section>
           <section className="p-3 m-3" id="latest-offers">
             <h2 className="">Exclusive Offers:-</h2>
             <div className="row mt-4 ">

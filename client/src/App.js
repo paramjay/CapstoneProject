@@ -12,7 +12,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 
 function App() {
-  
+  const Logout=()=>{
+    setLoggedInUser([]);
+  }
   const [LoggedInUser, setLoggedInUser] = useState([]);
   useEffect(() => {
     console.log(LoggedInUser)
@@ -21,7 +23,7 @@ function App() {
     <>
       <Row>
         <Col>
-          <NavBar LoggedInUser={LoggedInUser} />
+          <NavBar LoggedInUser={LoggedInUser} Logout={Logout}/>
         </Col>
       </Row>
       <Row>

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcryptjs';
 
 const Schema = mongoose.Schema;
 
@@ -15,6 +16,19 @@ const UserSchema = new Schema({
   role: { type: String, required: true },
   address: { type: String, required: true },
   isActive: { type: Boolean,  required: true, default: true },
+});
+
+
+
+UserSchema.pre("save", function (next) {
+  const user = this;
+  if (!user.isModified('password')) {
+    return next();
+  }
+  bcrypt.hash(user.password, 10, (error, hash) => {
+    user.password = hash;
+    next();
+  });
 });
 
 export const User = mongoose.model("User", UserSchema);
