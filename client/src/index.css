@@ -22,11 +22,18 @@
 .nav-link{
   text-align: center;
 }
-.nav-link:hover{
-font-size: 1.2rem;
-text-shadow: 1px 1px 1px rgb(179, 179, 179);
-border-radius: 5px;
+#nav-search .nav-link:hover{
+  font-size: 1rem !important;
+  color: #00ffc6;
+  text-shadow: 1px 1px 1px rgb(179, 179, 179);
+  border-radius: 5px;
 }
+
+.nav-link:hover{
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 1px rgb(179, 179, 179);
+  border-radius: 5px;
+  }
 .social-links svg {
   width: 20px;
   height: 20px;
@@ -48,6 +55,7 @@ footer{
 footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 20px;
 }
+
 .col{
   padding: 0;
 }
@@ -145,6 +153,14 @@ footer .menu-item a:hover{
   color: white;
   /* text-shadow: 1px 1px 2px black; */
 }
+
+
+
+.cart-img{
+  width: 115px;
+  height: auto;
+  object-fit: cover;
+}
 /* tablet */
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   #nav-search input{
@@ -168,6 +184,13 @@ footer .menu-item a:hover{
 }
 /* mobile */
 @media only screen and (max-width: 768px) {
+  
+  .cart-info{
+    text-align: center!important;
+  }
+  .cart-img{
+    width: 90%;
+  }
   #carousel-section{
     display: none;
   }
@@ -226,7 +249,6 @@ footer .menu-item a:hover{
   .search-box{
     display: none!important; 
   }
-  
 }
 
 .wishlist-card {
@@ -238,23 +260,22 @@ footer .menu-item a:hover{
 }
 
 .wishlist-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
  
 .wishlist-img-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-  height: 0;
+  /* position: relative; */
+  /* padding-bottom: 56.25%; 16:9 Aspect Ratio */
+  /* height: 0; */
   overflow: hidden;
 }
 
-
 .wishlist-img {
-  position: absolute;
+  /* position: absolute; */
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   object-fit: cover; /* Maintains aspect ratio, fills container */
 }
 
@@ -278,20 +299,17 @@ footer .menu-item a:hover{
 .card-text {
   margin-bottom: 1rem;
 }
-
-button {
-  width: 48%;
-}
+ 
 
 /* Responsive Styles for Wishlist */
 @media only screen and (max-width: 768px) {
   .wishlist-img {
-    height: 150px;
+    /* height: 150px; */
   }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .wishlist-img {
-    height: 250px;
+    /* height: 250px; */
   }
 }

@@ -19,6 +19,12 @@ const REGISTER_PRODUCT_MUTATION = `
 `;
 
 export default function AddProduct() {
+  const [file, setFile] = useState();
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
   const [formData, setFormData] = useState({
     category: "",
     subCategory: "",
@@ -41,7 +47,6 @@ export default function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     // Check for empty required fields
     const requiredFields = [
       'category', 'subCategory', 'name', 'brand', 'stock',
@@ -55,42 +60,63 @@ export default function AddProduct() {
       }
     }
 
+    if (!file) {
+      alert('Please select a file to upload');
+      return;
+    }
+
     const variables = { input: { ...formData } };
 
     console.log("Submitting the following data:", variables); // Debugging line
 
     try {
-      const response = await fetch('http://localhost:3002/graphql', {
+      const UploadformData = new FormData();
+      UploadformData.append('myfile', file); // 'myfile' should match the field name expected by the server 
+      const fileUploadApi = await fetch('http://localhost:3002/upload/'+formData.name, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          query: REGISTER_PRODUCT_MUTATION,
-          variables: variables
-        })
+        body: UploadformData
       });
-
-      const result = await response.json();
-
-      if (result.errors) {
-        console.error("Error adding product:", result.errors);
-        alert(result.errors[0].message); // Display error message to the user
-      } else {
-        console.log("Product added:", result.data.registerProduct);
-        alert("New product added successfully");
-        // Reset form after successful submission
-        setFormData({
-          category: "",
-          subCategory: "",
-          name: "",
-          brand: "",
-          stock: "",
-          size: "",
-          price: "",
-          salePrice: "",
-          description: ""
+  
+      if (!fileUploadApi.ok) {
+        alert("Unable to upload image try again later"); // Display error message to the user
+        throw new Error('Network response was not ok ' + fileUploadApi.statusText);
+      }
+      else{
+        const data = await fileUploadApi.json();
+        console.log(data.message);
+        const response = await fetch('http://localhost:3002/graphql', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            query: REGISTER_PRODUCT_MUTATION,
+            variables: variables
+          })
         });
+  
+        const result = await response.json();
+        if (result.errors) {
+          console.error("Error adding product:", result.errors);
+          alert(result.errors[0].message); // Display error message to the user
+        } else {
+          console.log("Product added:", result.data.registerProduct);
+          alert("New product added successfully");
+          // Reset form after successful submission
+          setFormData({
+            category: "",
+            subCategory: "",
+            name: "",
+            brand: "",
+            stock: "",
+            size: "",
+            price: "",
+            salePrice: "",
+            description: ""
+          });
+          setFile(null);
+          document.getElementById('file').value = null;
+        }
       }
     } catch (err) {
       console.error("Error adding product:", err);
@@ -100,7 +126,7 @@ export default function AddProduct() {
 
   return (
     <Container className="">
-      <div id="SignUp" className="card card-body p-4 m-5">
+      <div id="" className="card card-body p-4 m-5">
         <h3 className="text-center mb-4">Add Product Form</h3>
         <form id="AddProductForm" onSubmit={handleSubmit}>
           <Row>
@@ -216,7 +242,19 @@ export default function AddProduct() {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col md={6} lg={6} xs={12}>
+              <Form.Group className="mb-3" controlId="form_image">
+                <Form.Label>Upload Image:</Form.Label>
+                <Form.Control
+                  type="file"
+                  id="file"
+                  name="file"
+                  onChange={handleFileChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6} lg={6} xs={12}>
               <Form.Group className="mb-3" controlId="form_description">
                 <Form.Label>Description:</Form.Label>
                 <Form.Control

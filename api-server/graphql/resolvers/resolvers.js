@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import { User } from "../../models/UserModel.js";
 import { Product } from "../../models/ProductModel.js";
 
-// Define resolvers
+// Define resolvers 
 const resolvers = {
   Query: {
     getUsers: async () => {

@@ -23,13 +23,18 @@ export default function Wishlist() {
               <div className="wishlist-img-container">
                 <img src={item.image} alt={item.name} className="wishlist-img" />
               </div>
-              <Card.Body>
+              <Card.Body className="p-2">
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>
                   <span className="price">{item.price}</span>
                 </Card.Text>
-                <Button variant="primary" className="me-2">Add to Cart</Button>
-                <Button variant="danger">Remove</Button>
+                <Row>
+                  <Col md={12} lg={6} sm={12}><Button variant="primary" className="w-100 m-1" >Add to Cart</Button></Col>
+                  
+                  <Col md={12} lg={6} sm={12}><Button variant="danger" className="w-100 m-1" >Remove</Button></Col>
+                </Row>
+                
+                
               </Card.Body>
             </Card>
           </Col>

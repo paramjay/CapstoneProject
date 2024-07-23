@@ -51,7 +51,7 @@ function App() {
                 </>
               ) : LoggedInUser.role === "Buyer" ? (
                 <>
-                  <Route path="Product" element={<AddProduct />}/>
+                  {/* <Route path="Product" element={<AddProduct />}/> */}
                   <Route path="Wish-list" element={<Wishlist />} />
                   <Route path="Cart" element={<Cart />} />
 
@@ -60,6 +60,7 @@ function App() {
               ) :(<></>)
             }
             
+
             {/* Nested */}
             <Route path="/Home">
               <Route index element={<Main />} />

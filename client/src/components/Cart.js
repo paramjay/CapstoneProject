@@ -26,16 +26,14 @@ const Cart = () => {
           {cartItems.map((item) => (
             <Card className="mb-3" key={item.id}>
               <Row className="g-0">
-                <Col md={4}>
-                  <Card.Img
-                    variant="top"
+                <Col md={4} className="cart-info">
+                  <img className='cart-img m-2'
                     src={item.image}
                     alt={item.name}
-                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                   />
                 </Col>
                 <Col md={8}>
-                  <Card.Body>
+                  <Card.Body className='cart-info'>
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>${item.price.toFixed(2)}</Card.Text>
                     <Card.Text>Quantity: {item.quantity}</Card.Text>
