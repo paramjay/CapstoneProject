@@ -24,6 +24,10 @@ const resolvers = {
         throw new Error('Error fetching products');
       }
     },
+    getOneProduct: async (_, { id }) => {
+      const product = await Product.find({ id });
+      return product[0];
+    },
     loginAuth: async (_, { input }) => {
       try {
         const user = await User.find({username:input.username});
@@ -141,6 +145,11 @@ const resolvers = {
       const removedProduct = await Product.findOneAndDelete({ id });
       return "Product '"+removedProduct.name+"' Deleted Successfully";
     },
+    EditProductInput: async (_, { id, product }) => {
+      const EditProductInput = await Product.findOneAndUpdate({ id }, product);
+      return "Data Updated Successfully";
+    },
+
     removeUser: async (_, { id }) => {
       const user = await User.find({ id });
       const removedUser = await User.findOneAndDelete({ id });

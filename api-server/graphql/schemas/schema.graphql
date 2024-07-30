@@ -52,6 +52,18 @@ input RegisterProductInput {
   description: String
 }
 
+input EditProductInput {
+  category: String!
+  subCategory: String!
+  name: String!
+  brand: String!
+  stock: String!
+  size: String!
+  price: String!
+  salePrice: String!
+  description: String
+}
+
 input LoginInput {
   username: String!
   password: String!
@@ -62,12 +74,14 @@ input LoginInput {
 type Query {
   getUsers: [User],
   getProducts: [Product],
+  getOneProduct(id: String!): Product,
   loginAuth(input: LoginInput!): User,
 }
 
 type Mutation {
   registerUser(input: RegisterUserInput!): User,
-  registerProduct(input: RegisterProductInput!): Product
+  registerProduct(input: RegisterProductInput!): Product,
+  EditProductInput(id: String!, product: EditProductInput!): String,
   removeUser(id: String!): String
   removeProduct(id: String!): String
   deactivateUser(id: String!): String

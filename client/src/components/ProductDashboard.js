@@ -81,7 +81,7 @@ function ProductRows(props){
     <td>{props.row.price}</td>
     <td>{props.row.salePrice}</td>
     <td><Button variant="outline-danger" size="sm" onClick={removeProduct}>Delete</Button>
-    <Button variant="outline-primary" size="sm" >Edit</Button></td>
+    <Button variant="outline-primary" size="sm"  href={`/EditProduct/${props.row.id}`}>Edit</Button></td>
     </tr>
     )
 }

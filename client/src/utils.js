@@ -67,3 +67,39 @@ export const UserLogin = async (username,password) => {
   let data = await graphQLCommand(query, { input: {username,password} });
   return data.loginAuth;
 };
+export const getOneProduct = async (id) => {
+  // console.log(id);      
+  const query = `query {
+    getOneProduct(id: "${id}") {
+    id
+    category
+    subCategory
+    name
+    brand
+    stock
+    size
+    price
+    salePrice
+    description
+  }
+  }`;
+
+  
+
+    
+  const data = await graphQLCommand(query);
+  return data;
+};
+
+export const EditProductapi = async (id, product) => {
+  const query = `mutation EditProductInput($id: String!, $product: EditProductInput!) {
+    EditProductInput(id: $id, product: $product)
+  }`;
+  console.log(id);
+  if(product.id){
+    delete product.id;
+}
+  console.log(product);
+    let data = await graphQLCommand(query, { id:id, product });
+    return data;
+  };

@@ -14,6 +14,7 @@ import Wishlist from "./components/Wishlist";
 import NavBar from "./components/Navbar";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
+import EditProduct from "./components/EditProduct";
 
 function App() {
   const Logout=()=>{
@@ -48,6 +49,8 @@ function App() {
                   <Route path="AddProduct" element={<AddProduct />}/>
                   <Route path="UserDashboard" element={<UserDashboard />}/>
                   <Route path="ProductDashboard" element={<ProductDashboard />}/>
+                  <Route path="EditProduct/:id" element={<EditProduct />} />
+
                 </>
               ) : LoggedInUser.role === "Buyer" ? (
                 <>
