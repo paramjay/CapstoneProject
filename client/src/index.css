@@ -34,7 +34,7 @@
   text-shadow: 1px 1px 1px rgb(179, 179, 179);
   border-radius: 5px;
   }
-.social-links svg {
+.social-links svg { 
   width: 20px;
   height: 20px;
   color: var(--white-color);
@@ -92,8 +92,8 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 50px;
 }
 .product-img{
- height: 300px;
- width: auto;
+ height: 425px;
+ width: -webkit-fill-available;
 }
 .testimonial {
   margin-bottom: 30px;

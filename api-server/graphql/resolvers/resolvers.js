@@ -2,12 +2,33 @@
 import { v4 as uuidv4 } from 'uuid';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+
+import { Category } from "../../models/CategoryModel.js";
+import { SubCategory } from "../../models/SubCategoryModel.js";
 import { User } from "../../models/UserModel.js";
 import { Product } from "../../models/ProductModel.js";
+import { getMaxId } from "../../utils/utils.js";
 
 // Define resolvers 
 const resolvers = {
   Query: {
+    getCategory: async () => {
+      try {
+        const category = await Category.find({});
+        return category;
+      } catch (error) {
+        throw new Error('Error fetching Categories');
+      }
+    },
+    getSubCategory: async () => {
+      try {
+        const subCategory = await SubCategory.find({}).populate('categoryId');
+        console.log(subCategory);
+        return subCategory;
+      } catch (error) {
+        throw new Error('Error fetching Sub Categories');
+      }
+    },
     getUsers: async () => {
       try {
         const employees = await User.find({});
@@ -18,7 +39,10 @@ const resolvers = {
     },
     getProducts: async () => {
       try {
-        const products = await Product.find({});
+        const products = await Product.find({})
+        .populate('category')
+        .populate('subCategory')
+        .exec();
         return products;
       } catch (error) {
         throw new Error('Error fetching products');
@@ -49,6 +73,73 @@ const resolvers = {
     }
   },
   Mutation: {
+    registerCategory: async (_, { input }) => {
+      console.log(input);
+
+      // Validate input fields
+      if (!input.name ) {
+        throw new Error('Category Name can not be empty.');
+      }
+
+      const existingCategory = await Category.findOne({ name: input.name });
+      if (existingCategory) {
+        throw new Error('Category with this name already exists.');
+      }
+      var new_id=await getMaxId(Category)+1;
+      console.log(new_id)
+      // Create new Category
+      const newCategory = new Category({
+        id: new_id,
+        name: input.name,
+      });
+
+      try {
+        console.log('Attempting to save new Category:', newCategory);
+        await newCategory.save();
+        return newCategory;
+      } catch (error) {
+        console.error('Error creating Category:', error);
+        throw new Error(`Error creating Category: ${error.message}`);
+      }
+    },
+    registerSubCategory: async (_, { input }) => {
+      console.log(input);
+
+      // Validate input fields
+      if (!input.name ) {
+        throw new Error('Sub-Category Name can not be empty.');
+      }
+      if (!input.categoryId ) {
+        throw new Error('Must have a category.');
+      }
+      
+      const CategoryObj = await Category.findOne({ id: input.categoryId });
+      console.log(CategoryObj);
+      const existingSubCategory = await SubCategory.findOne({ name: input.name,
+        categoryId:CategoryObj._id });
+
+      if (existingSubCategory) {
+        throw new Error('Sub Category already exists.');
+      }
+      var new_id= await getMaxId(SubCategory)+1;
+      console.log(new_id)
+      // Create new Category
+      const newSubCategory = new SubCategory({
+        id: new_id,
+        name: input.name,
+        categoryId:CategoryObj._id,
+      });
+
+      try {
+        // console.log('Attempting to save new Sub-Category:', newSubCategory);
+        await newSubCategory.save();
+        return await newSubCategory.populate('categoryId');
+
+      } catch (error) {
+        console.error('Error creating Sub-Category:', error);
+        throw new Error(`Error creating Sub-Category: ${error.message}`);
+      }
+    },
     registerUser: async (_, { input }) => {
       console.log(input);
 
@@ -113,28 +204,35 @@ const resolvers = {
       console.log(input);
 
       // Validate input fields
-      if (!input.category || !input.subCategory || !input.name || !input.brand || !input.stock || !input.size || !input.price || !input.salePrice) {
+      if (!input.category || !input.subCategory || !input.name || !input.brand || !input.stock || !input.size || !input.price || !input.image) {
         throw new Error('All fields except description are required.');
       }
 
+      const CategoryObj = await Category.findOne({ id: input.category });
+      const SubCategoryObj = await SubCategory.findOne({ id: input.subCategory });
+      var new_id= await getMaxId(Product)+1;
+      // console.log(new_id)
       // Create new product
       const newProduct = new Product({
-        id: uuidv4(),
-        category: input.category,
-        subCategory: input.subCategory,
+        id: new_id,
+        category: CategoryObj._id,
+        subCategory: SubCategoryObj._id,
         name: input.name,
         brand: input.brand,
         stock: input.stock,
         size: input.size,
         price: input.price,
-        salePrice: input.salePrice,
         description: input.description,
+        image: input.image,
       });
 
       try {
         console.log('Attempting to save new product:', newProduct);
         await newProduct.save();
-        return newProduct;
+        return  await Product.findById(newProduct._id)
+        .populate('category')
+        .populate('subCategory')
+        .exec();
       } catch (error) {
         console.error('Error creating product:', error);
         throw new Error(`Error creating product: ${error.message}`);

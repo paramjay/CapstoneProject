@@ -23,6 +23,29 @@ export async function graphQLCommand(query, variables) {
     }
 }
 
+export async function graphQLCommand2(query, variables) {
+  try {
+    const response = await fetch("http://localhost:3002/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: variables
+        ? JSON.stringify({ query, variables })
+        : JSON.stringify({ query }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      return result;
+    } else {
+      console.log(response);
+      console.log("Error in sending data to Api-server:", response.statusText);
+    }
+  } catch (error) {
+    console.log(Error);
+    console.log("Error in sending data to Api-server:", error);
+  }
+}
+
 export const DeactivateUser = async (id) => {
     const query = `mutation DeactivateUser($deactivateUserId: String!) {
                         deactivateUser(id: $deactivateUserId)
@@ -103,3 +126,89 @@ export const EditProductapi = async (id, product) => {
     let data = await graphQLCommand(query, { id:id, product });
     return data;
   };
+
+export const getProducts = async () => {
+  const query = `query GetProducts {
+        getProducts {
+          id
+          category {
+            id
+            name
+          }
+          subCategory {
+            id
+            name
+          }
+          name
+          brand
+          stock
+          size
+          price
+          description
+          image
+        }
+        }`;
+    
+    const data = await graphQLCommand(query);
+    return data.getProducts;
+};
+
+export const addCategory = async (input) => {      
+  const query = `mutation RegisterCategory($input: CategoryInput!) {
+    registerCategory(input: $input) {
+      id
+      name
+    }
+  }`;
+  const data = await graphQLCommand2(query, { input });
+  if(data.errors){
+    alert(data.errors[0].message);
+    return null;
+  }
+  return data.data;
+};
+
+export const addSubCategory = async (input) => {      
+  const query = `mutation RegisterSubCategory($input: SubCategoryInput!) {
+    registerSubCategory(input: $input) {
+      id
+      name
+      categoryId {
+        id
+        name
+      }
+    }
+  }`;
+  const data = await graphQLCommand2(query, { input });
+  if(data.errors){
+    alert(data.errors[0].message);
+    return null;
+  }
+  return data.data;
+};
+
+
+export const getCategory = async () => {
+  const query = `query GetCategory {
+      getCategory {
+        id
+        name
+      }
+    }`;
+    const data = await graphQLCommand(query);
+    return data.getCategory;
+};
+export const getSubCategory = async () => {
+  const query = `query GetSubCategory {
+    getSubCategory {
+        id
+        name
+        categoryId {
+            id
+            name
+        }
+    }
+    }`;
+    const data = await graphQLCommand(query);
+    return data.getSubCategory;
+};

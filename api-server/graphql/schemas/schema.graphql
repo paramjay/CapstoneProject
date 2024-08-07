@@ -1,3 +1,21 @@
+type Category {
+  id: ID!
+  name: String!
+}
+type SubCategory {
+  id: ID!
+  name: String!
+  categoryId: Category
+}
+
+input CategoryInput {
+  name: String!
+}
+input SubCategoryInput {
+  name: String!
+  categoryId: String!
+}
+
 type User {
   id: ID!
   username: String!
@@ -29,15 +47,15 @@ input RegisterUserInput {
 
 type Product {
   id: ID!
-  category: String!
-  subCategory: String!
+  category: Category
+  subCategory: SubCategory
   name: String!
   brand: String!
   stock: String!
   size: String!
   price: String!
-  salePrice: String!
   description: String
+  image: String!
 }
 
 input RegisterProductInput {
@@ -48,8 +66,8 @@ input RegisterProductInput {
   stock: String!
   size: String!
   price: String!
-  salePrice: String!
   description: String
+  image: String!
 }
 
 input EditProductInput {
@@ -60,7 +78,6 @@ input EditProductInput {
   stock: String!
   size: String!
   price: String!
-  salePrice: String!
   description: String
 }
 
@@ -72,6 +89,9 @@ input LoginInput {
 
 
 type Query {
+  
+  getCategory: [Category],
+  getSubCategory: [SubCategory],
   getUsers: [User],
   getProducts: [Product],
   getOneProduct(id: String!): Product,
@@ -79,6 +99,10 @@ type Query {
 }
 
 type Mutation {
+  
+  registerCategory(input: CategoryInput!): Category!,
+  registerSubCategory(input: SubCategoryInput!): SubCategory!,
+
   registerUser(input: RegisterUserInput!): User,
   registerProduct(input: RegisterProductInput!): Product,
   EditProductInput(id: String!, product: EditProductInput!): String,

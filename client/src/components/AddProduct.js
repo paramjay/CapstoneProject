@@ -1,24 +1,36 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Row, Col, Form, Button, Container } from "react-bootstrap";
+import { getCategory,getSubCategory } from "../utils";
 
 const REGISTER_PRODUCT_MUTATION = `
   mutation RegisterProduct($input: RegisterProductInput!) {
     registerProduct(input: $input) {
       id
-      category
-      subCategory
+      subCategory {
+        id
+        name
+      }
+      category {
+        id
+        name
+      }
       name
       brand
       stock
       size
       price
-      salePrice
       description
+      image
     }
   }
 `;
 
 export default function AddProduct() {
+
+
+  const [subCategoryList, setSubCategoryList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+
   const [file, setFile] = useState();
 
   const handleFileChange = (event) => {
@@ -33,7 +45,6 @@ export default function AddProduct() {
     stock: "",
     size: "",
     price: "",
-    salePrice: "",
     description: ""
   });
 
@@ -50,7 +61,7 @@ export default function AddProduct() {
     // Check for empty required fields
     const requiredFields = [
       'category', 'subCategory', 'name', 'brand', 'stock',
-      'size', 'price', 'salePrice' 
+      'size', 'price' 
     ];
 
     for (let field of requiredFields) {
@@ -83,7 +94,9 @@ export default function AddProduct() {
       }
       else{
         const data = await fileUploadApi.json();
-        console.log(data.message);
+        console.log(data.file);
+        variables.input.image=data.file;
+        console.log(variables);
         const response = await fetch('http://localhost:3002/graphql', {
           method: 'POST',
           headers: {
@@ -111,8 +124,8 @@ export default function AddProduct() {
             stock: "",
             size: "",
             price: "",
-            salePrice: "",
-            description: ""
+            description: "",
+            image: ""
           });
           setFile(null);
           document.getElementById('file').value = null;
@@ -124,6 +137,22 @@ export default function AddProduct() {
     }
   };
 
+  const fetchCategory = async () => {
+    const data = await getCategory();
+    setCategoryList(data);
+  };
+  const fetchSubCategory = async () => {
+    
+    const data = await getSubCategory();
+    setSubCategoryList(data);
+  };
+
+  useEffect(() => {
+    //get date from server
+    fetchCategory();
+    fetchSubCategory();
+  }, []);
+
   return (
     <Container className="">
       <div id="" className="card card-body p-4 m-5">
@@ -133,28 +162,43 @@ export default function AddProduct() {
             <Col md={6} lg={6} xs={12}>
               <Form.Group className="mb-3" controlId="form_Category">
                 <Form.Label>Category:</Form.Label>
-                <Form.Control
+                <Form.Select id="category" name="category" 
+                  value={formData.category}
+                  onChange={handleChange}>
+                  <option value="">---Select---</option>
+                  {categoryList.map((singleRow) => (
+                      <option value={singleRow.id}> {singleRow.name}</option>
+                  ))}
+                </Form.Select>
+                {/* <Form.Control
                   type="text"
                   id="category"
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   required
-                />
+                /> */}
               </Form.Group>
             </Col>
             <Col md={6} lg={6} xs={12}>
               <Form.Group className="mb-3" controlId="form_subCategory">
                 <Form.Label>Sub Category:</Form.Label>
-                <Form.Control
+                <Form.Select id="subCategory" name="subCategory" 
+                  onChange={handleChange} value={formData.subCategory}>
+                  <option value="">---Select---</option>
+                  {subCategoryList.map((singleRow) => (
+                      <option value={singleRow.id}> {singleRow.name}</option>
+                  ))}
+                </Form.Select>
+                {/* <Form.Control
                   type="text"
                   id="subCategory"
                   name="subCategory"
                   value={formData.subCategory}
                   onChange={handleChange}
                   required
-                />
-              </Form.Group>
+                /> */}
+              </Form.Group> 
             </Col>
           </Row>
           <Row>
@@ -228,17 +272,6 @@ export default function AddProduct() {
               </Form.Group>
             </Col>
             <Col md={6} lg={6} xs={12}>
-              <Form.Group className="mb-3" controlId="form_sale-price">
-                <Form.Label>Sale Price:</Form.Label>
-                <Form.Control
-                  type="number"
-                  id="salePrice"
-                  name="salePrice"
-                  value={formData.salePrice}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
             </Col>
           </Row>
           <Row>
@@ -269,8 +302,8 @@ export default function AddProduct() {
             </Col>
           </Row>
           <div className="button-div mt-3 text-center">
-            <Button variant="primary" type="submit">
-              Add
+            <Button variant="success" type="submit">
+              Add New Product
             </Button>
           </div>
         </form>

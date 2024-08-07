@@ -8,13 +8,13 @@ import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import Cart from "./components/Cart";
 import Wishlist from "./components/Wishlist";
-
-
-
+import Products from "./components/Products";
 import NavBar from "./components/Navbar";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import EditProduct from "./components/EditProduct";
+import Category from "./components/Category";
+import SubCategory from "./components/SubCategory";
 
 function App() {
   const Logout=()=>{
@@ -44,11 +44,15 @@ function App() {
             <Route path="/" element={<Navigate replace to="/Home" />} />
             <Route path="Login" element={<Login LoggedInUser={LoggedInUser} setLoggedInUser={setLoggedInUser} />}/>
             <Route path="SignUp" element={<SignUp />}/>
+            <Route path="Products" element={<Products />}/>
+            
             {LoggedInUser.role === "Admin" ? (
                 <>
                   <Route path="AddProduct" element={<AddProduct />}/>
                   <Route path="UserDashboard" element={<UserDashboard />}/>
                   <Route path="ProductDashboard" element={<ProductDashboard />}/>
+                  <Route path="Category" element={<Category />}/>
+                  <Route path="SubCategory" element={<SubCategory />}/>
                   <Route path="EditProduct/:id" element={<EditProduct />} />
 
                 </>

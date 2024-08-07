@@ -86,7 +86,7 @@ app.post('/upload/:name?', (req, res) => {
       } else {
         res.json({
           message: 'File uploaded successfully!',
-          file: `uploads/${req.file.filename}`
+          file: `${req.file.filename}`
         });
       }
     }

@@ -10,7 +10,7 @@ export default function NavBar(props) {
       <Navbar.Toggle aria-controls="issue-navbar-nav" className="text-bg-light"/>
       <Navbar.Collapse id="issue-navbar-nav" className="">
       <NavLink NavLink  title="Home Page" className="nav-link p-2" to="/">Home</NavLink>
-      <NavLink NavLink  title="Products" className="nav-link p-2" to="/Product">Products</NavLink>
+      <NavLink NavLink  title="Products" className="nav-link p-2" to="/Products">Products</NavLink>
       {props.LoggedInUser.role === "Admin" ? (
         <>
         {/* <NavLink NavLink  title="Add Product" className="nav-link p-2" to="/AddProduct">Add Product</NavLink> */}
