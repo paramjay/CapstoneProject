@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Row, Col, Form, Button, Container } from "react-bootstrap";
-import { getCategory,getSubCategory } from "../utils";
+import { getCategory,getSubCategoryByCategoryId } from "../utils";
 
 const REGISTER_PRODUCT_MUTATION = `
   mutation RegisterProduct($input: RegisterProductInput!) {
@@ -20,6 +20,7 @@ const REGISTER_PRODUCT_MUTATION = `
       size
       price
       description
+      gender
       image
     }
   }
@@ -45,6 +46,7 @@ export default function AddProduct() {
     stock: "",
     size: "",
     price: "",
+    gender: "",
     description: ""
   });
 
@@ -54,6 +56,11 @@ export default function AddProduct() {
       ...prevData,
       [name]: value
     }));
+    if(name=='gender'){
+    alert(value)}
+    if(name=='category'){
+      fetchSubCategory(value);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -61,7 +68,7 @@ export default function AddProduct() {
     // Check for empty required fields
     const requiredFields = [
       'category', 'subCategory', 'name', 'brand', 'stock',
-      'size', 'price' 
+      'size', 'price' ,'gender'
     ];
 
     for (let field of requiredFields) {
@@ -141,16 +148,14 @@ export default function AddProduct() {
     const data = await getCategory();
     setCategoryList(data);
   };
-  const fetchSubCategory = async () => {
-    
-    const data = await getSubCategory();
+  const fetchSubCategory = async (id) => {
+    const data = await getSubCategoryByCategoryId(id);
     setSubCategoryList(data);
   };
 
   useEffect(() => {
     //get date from server
     fetchCategory();
-    fetchSubCategory();
   }, []);
 
   return (
@@ -170,14 +175,6 @@ export default function AddProduct() {
                       <option value={singleRow.id}> {singleRow.name}</option>
                   ))}
                 </Form.Select>
-                {/* <Form.Control
-                  type="text"
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  required
-                /> */}
               </Form.Group>
             </Col>
             <Col md={6} lg={6} xs={12}>
@@ -272,6 +269,15 @@ export default function AddProduct() {
               </Form.Group>
             </Col>
             <Col md={6} lg={6} xs={12}>
+            <Form.Group className="mb-3" controlId="form_price">
+              <Form.Label>Gender:</Form.Label>
+              <Form.Check type="Radio" label="Men"
+                value="Men" id="Men" name="gender" onChange={handleChange}
+              />
+              <Form.Check type="Radio" label="Women"
+                value="Women" id="Women" name="gender" onChange={handleChange}
+              />
+            </Form.Group>
             </Col>
           </Row>
           <Row>

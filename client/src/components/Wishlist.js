@@ -1,37 +1,86 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { Container, Button, Row, Col, Card } from "react-bootstrap";
-import p1 from "./../images/p1.jpg";
-import p2 from "./../images/p2.jpg";
-import p3 from "./../images/p3.jpg";
+import { getWishlistByUserId,removeWishlist } from "./../utils";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Wishlist() {
-  const wishlistItems = [
-    { id: 1, image: p1, name: "Men's Linen Shirt", price: "$41.99" },
-    { id: 2, image: p2, name: "Women's Dress", price: "$29.99" },
-    { id: 3, image: p3, name: "Men's Jacket", price: "$59.99" },
-    { id: 4, image: p3, name: "Men's Jacket", price: "$59.99" },
-    // Add more items as needed
-  ];
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const addToCart = (item) => {
+    let cartProducts = JSON.parse(localStorage.getItem('cartProducts'))||[];
+    console.log(cartProducts);
+    if(!cartProducts.length>0){
+        console.log("empty");
+        item={...item,quantity:1}
+        localStorage.setItem('cartProducts', JSON.stringify([item]));
+        console.log("empty-modified-",localStorage.getItem('cartProducts'))
+    }
+    else{
+        // cartProducts=[cartProducts];
+        let existingItem=false;
+        console.log("not-empty");
+        cartProducts=cartProducts.map(data => {
+            if (data.id == item.id) {
+                console.log('Existing-Item');
+                existingItem=true
+                return { ...data, quantity: data.quantity + 1 };
+            }
+            return data;
+         });
+         if(!existingItem){
+            console.log('Non-Existing-Item');
+            // cartProducts=[cartProducts];
+            item={...item,quantity:1}
+            cartProducts.push(item);
+         }
+         localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+         console.log("modified-",localStorage.getItem('cartProducts'))
+    }
+    alert("Product added in cart");
+  };
 
+  const removeFromWishlist = async (id) => {
+    let message =await removeWishlist(id.toString());
+    alert(message);
+    fetchData(user);
+  };
+  const fetchData = async (user) => {  
+    console.log(user);
+    const data = await getWishlistByUserId(user.id);
+    console.log(data);
+    setWishlistItems(data);
+  }; 
+  useEffect(() => {
+    let getUser = JSON.parse(localStorage.getItem('token'))||null
+    if(getUser==null){
+      navigate("/login");
+    }
+    else{
+      setUser(getUser);
+      fetchData(getUser);
+    }
+  }, []);
   return (
     <Container className="mt-5">
-      <h2 className="mb-4">Your Wishlist</h2>
+      <h2 className="mb -4">Your Wishlist:-</h2>
       <Row>
+
         {wishlistItems.map(item => (
-          <Col md={3} className="mb-4" key={item.id}> {/* Adjust column size to fit 4 items */}
+          <Col md={3} className="mb-4" key={item.product.id}> {/* Adjust column size to fit 4 items */}
             <Card className="wishlist-card">
               <div className="wishlist-img-container">
-                <img src={item.image} alt={item.name} className="wishlist-img" />
+                <img src={"http://localhost:3002/file/"+item.product.image} alt={item.product.name} className="wishlist-img" />
               </div>
               <Card.Body className="p-2">
-                <Card.Title>{item.name}</Card.Title>
+                <Card.Title>{item.product.name}</Card.Title>
                 <Card.Text>
-                  <span className="price">{item.price}</span>
+                  <span className="price">${item.product.price}</span>
                 </Card.Text>
                 <Row>
-                  <Col md={12} lg={6} sm={12}><Button variant="primary" className="w-100 m-1" >Add to Cart</Button></Col>
-                  
-                  <Col md={12} lg={6} sm={12}><Button variant="danger" className="w-100 m-1" >Remove</Button></Col>
+                  <Col md={12} lg={6} sm={12}><Button variant="primary" onClick={() => addToCart(item.product)} className="w-100 m-1" >Add to Cart</Button></Col>
+                  <Col md={12} lg={6} sm={12}><Button variant="danger" onClick={() => removeFromWishlist(item.id)}  className="w-100 m-1" >Remove</Button></Col>
                 </Row>
                 
                 
@@ -39,6 +88,11 @@ export default function Wishlist() {
             </Card>
           </Col>
         ))}
+        {!wishlistItems.length>0 ? (
+        <>
+        <div className="p-5 text-center mt-5 mb-5"><h3 className="mb-5">No Product in wishlist.</h3></div>
+        </>):(<></>)
+        }
       </Row>
     </Container>
   );

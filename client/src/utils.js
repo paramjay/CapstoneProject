@@ -212,3 +212,52 @@ export const getSubCategory = async () => {
     const data = await graphQLCommand(query);
     return data.getSubCategory;
 };
+export const getSubCategoryByCategoryId = async (input) => {
+  var query=`query GetSubCategoryByCategoryId($input: String!) {
+    getSubCategoryByCategoryId(input: $input) {
+      id
+      name
+    }
+  }`;  
+  const data = await graphQLCommand(query,{input});
+  return data.getSubCategoryByCategoryId;
+}
+
+export const AddtoWishlist = async (userId,productId) => {
+  var query=`mutation AddToWishlist($userId: String!, $productId: String!) {
+    addToWishlist(userId: $userId, productId: $productId)
+  }`;  
+  const data = await graphQLCommand(query,{userId,productId});
+  return data.addToWishlist; 
+}
+
+export const getWishlistByUserId = async (input) => {
+  var query=`query GetWishlistByUserId($input: String!) {
+  getWishlistByUserId(input: $input) {
+    id
+    product {
+        id
+        name
+        brand
+        stock
+        size
+        price
+        gender
+        description
+        image
+      }
+    }
+  }`;  
+  const data = await graphQLCommand(query,{input});
+  return data.getWishlistByUserId;
+}
+
+
+export const removeWishlist = async (id) => {
+  const query = `mutation RemoveWishlist($removeWishlistId: String!) {
+    removeWishlist(id: $removeWishlistId)
+  }`;
+  console.log(id);
+  let data = await graphQLCommand(query, { removeWishlistId: id });
+  return data.removeWishlist;
+};

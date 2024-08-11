@@ -2,11 +2,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-
+import mongoose from "mongoose";
 import { Category } from "../../models/CategoryModel.js";
 import { SubCategory } from "../../models/SubCategoryModel.js";
 import { User } from "../../models/UserModel.js";
 import { Product } from "../../models/ProductModel.js";
+import { Wishlist } from "../../models/WishList.js";
 import { getMaxId } from "../../utils/utils.js";
 
 // Define resolvers 
@@ -70,7 +71,53 @@ const resolvers = {
         console.log("error",error);
         throw new Error('Error fetching products');
       }
-    }
+    },
+    getSubCategoryByCategoryId: async (_, { input }) => {
+      try {
+        const category = await Category.find({id:parseInt(input)});
+        const subCategory = await SubCategory.find({categoryId:category});
+        console.log(subCategory);
+        return subCategory;
+      } catch (error) {
+        throw new Error('Error fetching Sub Categories');
+      }
+    },
+    getFilteredProducts: async (_, props) => {
+      console.log(props);
+      const query = {};
+
+      if (props.price && props.price>0) {
+        query.price = {};
+        query.price.$gte = 1;
+        query.price.$lte = parseFloat(props.price);
+      }
+      if (props.category) {
+        const category = await Category.findOne({id:parseInt(props.category)});
+        query.category = category._id;
+      }
+  
+      if (props.subCategory) {
+        const subCategory = await SubCategory.findOne({id:parseInt(props.subCategory)});
+        query.subCategory = subCategory._id;
+      }
+      if (props.gender) {
+        query.gender = props.gender;
+      }
+
+      console.log(query)
+      const products = await Product.find(query);
+      return products;
+    },
+    getWishlistByUserId: async (_, { input }) => {
+      try {
+        const user = await User.find({id:input});
+        const wishlist = await Wishlist.find({user}).populate('product').exec();
+        console.log(wishlist);
+        return wishlist;
+      } catch (error) {
+        throw new Error('Error fetching Wishlist');
+      }
+    },
   },
   Mutation: {
     registerCategory: async (_, { input }) => {
@@ -176,9 +223,11 @@ const resolvers = {
       // });
       // const hashedPassword = bcrypt.hash(input.password, 10);
 
+      var new_id=await getMaxId(User)+1;
+      console.log(new_id)
       // Create new user
       const newUser = new User({
-        id: uuidv4(),
+        id: new_id,
         username: input.username,
         email: input.email,
         password: input.password,
@@ -204,7 +253,7 @@ const resolvers = {
       console.log(input);
 
       // Validate input fields
-      if (!input.category || !input.subCategory || !input.name || !input.brand || !input.stock || !input.size || !input.price || !input.image) {
+      if (!input.category || !input.subCategory || !input.name || !input.brand || !input.stock || !input.size || !input.price || !input.image || !input.gender) {
         throw new Error('All fields except description are required.');
       }
 
@@ -222,6 +271,7 @@ const resolvers = {
         stock: input.stock,
         size: input.size,
         price: input.price,
+        gender:input.gender,
         description: input.description,
         image: input.image,
       });
@@ -262,8 +312,41 @@ const resolvers = {
       );
       return "User '"+updatedUser.username+"' Deactivated Successfully";
     },
-    
-    
+    addToWishlist: async (_, { userId, productId }) => {
+      console.log(userId,productId)
+      const user = await User.findOne({ id:userId });
+      const product = await Product.findOne({ id:productId });
+      console.log(user,product)
+      const existingWishlist = await Wishlist.findOne({ user:user,product:product });
+      if(!existingWishlist){
+        var new_id=await getMaxId(Wishlist)+1;
+        const newWishlist = new Wishlist({
+          id: new_id,
+          user: user._id,
+          product:product._id
+        });
+        try {
+          console.log('Attempting to save new Wishlist:', newWishlist);
+          await newWishlist.save();
+          return "Product added to wishlist successfully!";
+        } catch (error) {
+          console.error('Error adding Wishlist:', error);
+          throw new Error(`Error adding Wishlist: ${error.message}`);
+        }
+      }
+      else{
+        return "Already in Wishlist.";
+      }
+    },
+    removeWishlist: async (_, { id }) => {
+      try {
+        const removedWishlist = await Wishlist.findOneAndDelete({ id });
+        return "Product removed from wishlist Successfully"; 
+      } catch (error) {
+        console.error('Error removing product from Wishlist:', error);
+        throw new Error(`Error removing product from Wishlist: ${error.message}`);
+      }
+    },
   },
 };
 

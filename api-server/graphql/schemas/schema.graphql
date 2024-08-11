@@ -54,6 +54,7 @@ type Product {
   stock: String!
   size: String!
   price: String!
+  gender: String!
   description: String
   image: String!
 }
@@ -66,6 +67,7 @@ input RegisterProductInput {
   stock: String!
   size: String!
   price: String!
+  gender: String!
   description: String
   image: String!
 }
@@ -78,7 +80,16 @@ input EditProductInput {
   stock: String!
   size: String!
   price: String!
+  gender: String!
   description: String
+}
+
+
+
+type Wishlist {
+  id: ID!
+  user: User
+  product: Product
 }
 
 input LoginInput {
@@ -89,24 +100,29 @@ input LoginInput {
 
 
 type Query {
-  
   getCategory: [Category],
   getSubCategory: [SubCategory],
   getUsers: [User],
   getProducts: [Product],
   getOneProduct(id: String!): Product,
   loginAuth(input: LoginInput!): User,
+  getSubCategoryByCategoryId(input: String!): [SubCategory] ,
+  getFilteredProducts(gender: String, category: String, subCategory: String,
+  price: String): [Product!]
+  getWishlistByUserId(input: String!): [Wishlist],
+      
 }
 
 type Mutation {
   
   registerCategory(input: CategoryInput!): Category!,
   registerSubCategory(input: SubCategoryInput!): SubCategory!,
-
   registerUser(input: RegisterUserInput!): User,
   registerProduct(input: RegisterProductInput!): Product,
   EditProductInput(id: String!, product: EditProductInput!): String,
   removeUser(id: String!): String
   removeProduct(id: String!): String
   deactivateUser(id: String!): String
+  addToWishlist(userId: String!, productId: String!): String,
+  removeWishlist(id: String!): String
 }

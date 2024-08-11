@@ -15,10 +15,13 @@ import { Row, Col } from "react-bootstrap";
 import EditProduct from "./components/EditProduct";
 import Category from "./components/Category";
 import SubCategory from "./components/SubCategory";
+import Checkout from "./components/Checkout";
+
 
 function App() {
   const Logout=()=>{
     localStorage.removeItem('token');
+    localStorage.removeItem('cartProducts');
     setLoggedInUser([]);
   }
   const [LoggedInUser, setLoggedInUser] = useState([]);
@@ -45,6 +48,10 @@ function App() {
             <Route path="Login" element={<Login LoggedInUser={LoggedInUser} setLoggedInUser={setLoggedInUser} />}/>
             <Route path="SignUp" element={<SignUp />}/>
             <Route path="Products" element={<Products />}/>
+            <Route path="Cart" element={<Cart />} />
+            <Route path="Wish-list" element={<Wishlist />} />
+            <Route path="Checkout" element={<Checkout />} />
+            
             
             {LoggedInUser.role === "Admin" ? (
                 <>
@@ -54,7 +61,8 @@ function App() {
                   <Route path="Category" element={<Category />}/>
                   <Route path="SubCategory" element={<SubCategory />}/>
                   <Route path="EditProduct/:id" element={<EditProduct />} />
-
+                  <Route path="Cart" element={<Cart />} />
+                  <Route path="Wish-list" element={<Wishlist />} />
                 </>
               ) : LoggedInUser.role === "Buyer" ? (
                 <>
