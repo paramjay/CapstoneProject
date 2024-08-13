@@ -1,15 +1,38 @@
 import React, { useState,useEffect } from "react";
 import { Row, Col, Form, Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-// import {  } from "../utils";
+import { addCheckout } from "../utils";
 
 export default function Checkout() {
     const [cartItems] = useState(JSON.parse(localStorage.getItem('cartProducts'))||[]);
     const [user, setUser] = useState("");
     const navigate = useNavigate();
+    const taxRate = 0.08; // 8% tax rate
 
+    const [subtotal, setSubtotal] = useState(cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
+    const [promoDiscount, setPromoDiscount] = useState(JSON.parse(localStorage.getItem('promo'))||'');
+    
+    const [tax, setTax] = useState(getTax());
+    const [total, setTotal] = useState(getTotal());
+    function getTax(){
+      if(promoDiscount==''){
+        return (subtotal*taxRate);
+      }
+      else{
+        return ((subtotal*0.9)*taxRate);
+      }
+    }
+    function getTotal(){
+      if(promoDiscount==''){
+        return (subtotal + tax);
+      }
+      else{
+        return ((subtotal*0.9) + (subtotal*0.9)*taxRate);
+      }
+    }
       const [formData, setFormData] = useState({
         user:'',
+        cart:[],
         address: '',
         country: '',
         state: '',
@@ -18,8 +41,13 @@ export default function Checkout() {
         ccName: '',
         ccNumber: '',
         ccExpiration: '',
-        ccCvv: ''
+        ccCvv: '',
+        total:total.toString(),
+        promoCode:promoDiscount.promo,
+        promoDiscount:promoDiscount.discount,
+        categoryDiscount:''
       });
+      const [err, setErr] = useState({});
 
       const handleChange = (e) => {
         let { id, value } = e.target;
@@ -28,11 +56,22 @@ export default function Checkout() {
             id='paymentMethod';
         }
         setFormData({ ...formData, [id]: value });
+        
       };
       
-
+      const removeFields = (obj, fields) => {
+        const newObj = { ...obj };
+        fields.forEach(field => delete newObj[field]);
+        return newObj;
+      };
       useEffect(() => {
-        let getUser = JSON.parse(localStorage.getItem('token'))||null
+        let getUser = JSON.parse(localStorage.getItem('token'))||null;
+        
+        // console.log(promoDiscount);
+        const fieldsToRemove = ['description', 'gender', 'brand','image','stock'];
+
+        const newCartItems = cartItems.map(product => removeFields(product, fieldsToRemove));
+        setFormData({ ...formData, ["cart"]: newCartItems,["user"]:getUser.id });
         if(getUser==null){
             navigate("/login");
         }
@@ -41,34 +80,71 @@ export default function Checkout() {
         }
       }, []);
       
-      const taxRate = 0.08; // 8% tax rate
-
-      const [subtotal, setSubtotal] = useState(cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
-      const [promoDiscount, setPromoDiscount] = useState(JSON.parse(localStorage.getItem('promo'))||'');
+      const validateCcCvv = (ccCvv) => {
+        const regex = /^\d{3}$/;
+        return regex.test(ccCvv);
+      };
       
-      const [tax, setTax] = useState(getTax());
-      const [total, setTotal] = useState(getTotal());
-      function getTax(){
-        if(promoDiscount==''){
-          return (subtotal*taxRate);
-        }
-        else{
-          return ((subtotal*0.9)*taxRate);
-        }
-      }
-      function getTotal(){
-        if(promoDiscount==''){
-          return (subtotal + tax);
-        }
-        else{
-          return ((subtotal*0.9) + (subtotal*0.9)*taxRate);
-        }
-      }
-      const handleSubmit = (e) => {
+      // to validate CC Expiration (MM/YY)
+      const validateCcExpiration = (ccExpiration) => {
+        const regex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        return regex.test(ccExpiration);
+      };
+      
+      // to validate CC Number (16-digit number)
+      const validateCcNumber = (ccNumber) => {
+        const regex = /^\d{16}$/;
+        return regex.test(ccNumber);
+      };
+      
+      // to validate Canadian ZIP Code (Example:N3H 0E4)
+      const validateZip = (zip) => {
+        const regex = /^[A-Z]\d[A-Z] \d[A-Z]\d$/;
+        return regex.test(zip);
+      };
+
+      const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        if(formData.cart.length<1){
+          alert("No Products in cart");
+          return null;
+        }
         setFormData({ ...formData, ["user"]: user.id });
-        console.log(formData);
+        var errorMessage={};
+        Object.entries(formData).forEach(([key, value]) => {
+          if(value==='' && key!='categoryDiscount'){
+            console.log(key,value);
+            errorMessage[key]= 'This field is required.';
+          }
+
+          if(!validateCcCvv(value) && key==='ccCvv'){
+            errorMessage[key]= 'Invalid CVV. Must be 3 digits number';
+          }
+
+          if(!validateCcExpiration(value) && key==='ccExpiration'){
+            errorMessage[key]= 'Invalid CVV. Must be MM/DD format';
+          }
+
+          if(key==='ccNumber' && !validateCcNumber(value)){
+            errorMessage[key]= 'Invalid Credit Card Number. Must be 16 digits number';
+          }
+
+          if(!validateZip(value) && key==='zip'){
+            errorMessage[key]= "Invalid ZIP.Must like 'A1B 2C3'";
+          }
+        });
+        setErr(errorMessage);
+        console.log(err);
+        if(JSON.stringify(errorMessage)=='{}'){
+          let new_checkout= await addCheckout(formData);
+          if(new_checkout.addCheckout){
+            localStorage.removeItem('cartProducts');
+            if(formData.promoCode){
+              localStorage.removeItem('promo');
+            }
+            navigate("ThankYou");
+          }
+        }
       };
 
 
@@ -116,6 +192,7 @@ export default function Checkout() {
             <div className="mb-3">
               <label htmlFor="address">Delievery Address</label>
               <input type="text" className="form-control" id="address" defaultValue={user.address} value={formData.address} onChange={handleChange} />
+              <div className="text-danger">{err.address}</div>
             </div>
 
             <div className="row">
@@ -125,7 +202,7 @@ export default function Checkout() {
                   <option value="">Choose...</option>
                   <option value="Canada">Canada</option>
                 </select>
-                <div className="invalid-feedback">Please select a valid country.</div>
+                <div className="text-danger">{err.country}</div>
               </div>
               <div className="col-md-4 mb-3">
                 <label htmlFor="state">State</label>
@@ -142,12 +219,12 @@ export default function Checkout() {
                     <option value="Quebec">Quebec</option>
                     <option value="Saskatchewan">Saskatchewan</option>
                 </select>
-                <div className="invalid-feedback">Please provide a valid state.</div>
+                <div className="text-danger">{err.state}</div>
               </div>
               <div className="col-md-3 mb-3">
                 <label htmlFor="zip">Zip</label>
                 <input type="text" className="form-control" id="zip" value={formData.zip} onChange={handleChange} required />
-                <div className="invalid-feedback">Zip code required.</div>
+                <div className="text-danger">{err.zip}</div>
               </div>
             </div>
 
@@ -171,12 +248,12 @@ export default function Checkout() {
                 <label htmlFor="ccName">Name on card</label>
                 <input type="text" className="form-control" id="ccName" value={formData.ccName} onChange={handleChange} required />
                 <small className="text-muted">Full name as displayed on card</small>
-                <div className="invalid-feedback">Name on card is required</div>
+                <div className="text-danger">{err.ccName}</div>
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="ccNumber">Credit card number</label>
                 <input type="text" className="form-control" id="ccNumber" value={formData.ccNumber} onChange={handleChange} required />
-                <div className="invalid-feedback">Credit card number is required</div>
+                <div className="text-danger">{err.ccNumber}</div>
               </div>
             </div>
 
@@ -184,12 +261,12 @@ export default function Checkout() {
               <div className="col-md-3 mb-3">
                 <label htmlFor="ccExpiration">Expiration</label>
                 <input type="text" className="form-control" id="ccExpiration" value={formData.ccExpiration} onChange={handleChange} required />
-                <div className="invalid-feedback">Expiration date required</div>
+                <div className="text-danger">{err.ccExpiration}</div>
               </div>
               <div className="col-md-3 mb-3">
                 <label htmlFor="ccCvv">CVV</label>
                 <input type="text" className="form-control" id="ccCvv" value={formData.ccCvv} onChange={handleChange} required />
-                <div className="invalid-feedback">Security code required</div>
+                <div className="text-danger">{err.ccCvv}</div>
               </div>
             </div>
 

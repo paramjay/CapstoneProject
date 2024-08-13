@@ -9,6 +9,8 @@ import { User } from "../../models/UserModel.js";
 import { Product } from "../../models/ProductModel.js";
 import { Wishlist } from "../../models/WishList.js";
 import { getMaxId } from "../../utils/utils.js";
+import { Checkout } from '../../models/CheckoutModel.js';
+import { Cart } from '../../models/CartModel.js';
 
 // Define resolvers 
 const resolvers = {
@@ -347,6 +349,70 @@ const resolvers = {
         throw new Error(`Error removing product from Wishlist: ${error.message}`);
       }
     },
+
+    addCheckout: async (_, { input }) => {
+      // console.log(input);
+
+      // Validate input fields
+      if (!input.user || !input.address || !input.country ||
+         !input.state || !input.zip || !input.paymentMethod || !input.ccName ||
+          !input.ccNumber || !input.ccExpiration || !input.ccCvv 
+          || !input.total || !input.cart.length<0) {
+        throw new Error('All fields are required.');
+      }
+
+      // Check if user with the same email already exists
+      const existingUser = await User.findOne({ id: parseInt(input.user) });
+      
+      var new_id=await getMaxId(Checkout)+1;
+      
+      // Create new Checkout
+      let newCheckout = new Checkout({
+        id: new_id,
+        user: existingUser._id,
+        address: input.address,
+        country: input.country,
+        state: input.state,
+        zip: input.zip,
+        paymentMethod: input.paymentMethod,
+        ccName: input.ccName,
+        ccNumber: input.ccNumber,
+        ccExpiration: input.ccExpiration,
+        ccCvv: input.ccCvv,
+        total:input.total,
+        promoCode:input.promoCode,
+        promoDiscount:input.promoDiscount,
+        categoryDiscount:input.categoryDiscount,
+      });
+
+      try {
+        // console.log('Attempting to save new checkout:', newCheckout);
+        newCheckout=await newCheckout.save();
+        var new_id2=await getMaxId(Cart);
+        input.cart.forEach(async item => {
+          new_id2++
+          // console.log(new_id2);
+          let newCart = new Cart({
+            id: new_id2,
+            product: await User.findOne({ id: parseInt(item.id) }),
+            checkout: newCheckout._id,
+            productName: item.name,
+            price: item.price,
+            total: item.price*item.quantity,
+            quantity: item.quantity,
+            size: item.size,
+          });
+          await newCart.save();
+        });
+        
+      } catch (error) {
+        console.error('Error creating new Checkout:', error);
+        throw new Error(`Error creating new Checkout: ${error.message}`);
+      }
+      return "Thank you for your purchase & stay tuned for upcoming Fashion Sales!";
+      
+    },
+    
   },
 };
 

@@ -98,6 +98,56 @@ input LoginInput {
 }
 
 
+type Checkout {
+  id: ID!
+  user: Category
+  address: String!,
+  country: String!,
+  state: String!,
+  zip: String!,
+  paymentMethod: String!,
+  ccName: String!,
+  ccNumber: String!,
+  ccExpiration: String!,
+  ccCvv: String!,
+  total: String!,
+  promoCode: String,
+  promoDiscount: String,
+  categoryDiscount:String
+}
+
+type Cart {
+  id: ID!
+  product: Product
+  productName:String
+  total:String
+  price: String
+  quantity: String
+}
+input CartItem {
+  id:String!
+  name: String!
+  price: String!
+  quantity: Int!
+  size:String!
+}
+input CheckoutInput {
+  user: String!
+  cart: [CartItem!]!
+  address: String!,
+  country: String!,
+  state: String!,
+  zip: String!,
+  paymentMethod: String!,
+  ccName: String!,
+  ccNumber: String!,
+  ccExpiration: String!,
+  ccCvv: String!,
+  total: String!,
+  promoCode: String,
+  promoDiscount: String,
+  categoryDiscount:String
+}
 
 type Query {
   getCategory: [Category],
@@ -124,5 +174,6 @@ type Mutation {
   removeProduct(id: String!): String
   deactivateUser(id: String!): String
   addToWishlist(userId: String!, productId: String!): String,
-  removeWishlist(id: String!): String
+  removeWishlist(id: String!): String,
+  addCheckout(input: CheckoutInput!): String
 }

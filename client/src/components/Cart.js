@@ -110,7 +110,7 @@ const Cart = () => {
               <Button variant="primary" href="/Checkout" className="w-100">Checkout</Button>
             </Card.Body>
           </Card>
-          <Card className='mt-2'>
+          <Card className='mt-2 mb-3'>
             <Card.Body >
               <Card.Title>Add Promo <i class="fa fa-tags"></i></Card.Title>
               <Card.Text>Get discounts by applying Promo Code</Card.Text>

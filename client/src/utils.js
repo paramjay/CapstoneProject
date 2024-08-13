@@ -261,3 +261,15 @@ export const removeWishlist = async (id) => {
   let data = await graphQLCommand(query, { removeWishlistId: id });
   return data.removeWishlist;
 };
+
+export const addCheckout = async (input) => {      
+  const query = `mutation AddCheckout($input: CheckoutInput!) {
+      addCheckout(input: $input)
+    }`;
+  const data = await graphQLCommand2(query, { input });
+  if(data.errors){
+    alert("Try again.. "+data.errors[0].message);
+    return null;
+  }
+  return data.data;
+};
