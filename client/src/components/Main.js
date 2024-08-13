@@ -1,8 +1,9 @@
 import React from "react";
 import Carousel from 'react-bootstrap/Carousel';
-import p1  from "./../images/p1.jpg";
-import p2  from "./../images/p2.jpg";
-import p3  from "./../images/p3.jpg";
+import p1  from "./../images/CatBanner1.jpg";
+import p2  from "./../images/CatBanner2.jpg";
+import p3  from "./../images/CatBanner3.jpg";
+import p4  from "./../images/CatBanner4.jpg";
 
 import banner1  from "./../images/main-banner1.png";
 import banner2  from "./../images/main-banner2.png";
@@ -27,52 +28,47 @@ export default function Main() {
           </Carousel>
           </section>
           <section className="p-3 m-3" id="latest-offers">
-            <h2 className="">Exclusive Offers:-</h2>
+            <h2 className="">Categories:-</h2>
             <div className="row mt-4 ">
-              <div className="col-md-4">
-                <div className="card m-auto shadow p-3 product-div w-75 rounded-5">
-                  <div className="text-center">
-                  <a className="btn btn-outline-danger end-0 me-2 position-absolute rounded-5 wishlist" href="#" title="Add to Wishlist">
-                    <i style={{fontSize:"18px"}} className="fa fa-heart-o"></i>
-                  </a>
-                  <img className="product-img " src={p1} alt="My Image" />
+              <div className="col-md-3">
+                  <div className="Home_cat shadow rounded-5">
+                    <div style={{ backgroundImage: `linear-gradient(to right, #00000030, #00000073),url(${p1})`,
+                    height:'420px',width:'auto',
+                    backgroundSize: 'cover',backgroundPosition: 'center', alignItems: 'center',
+                    display: 'flex',borderRadius: '15px',justifyContent: 'center' }}>
+                      <a className="text-decoration-none" href="Products?gender=Women&category=1&subCategory=&price=0&">
+                        <h3 className="text-white">Fashion Women</h3></a></div>
                   </div>
-                  <h4 className="m-1">Brand</h4>
-                  <h5 className="m-1">Men's Linen Shirts Short Sleeve</h5>
-                  <div><span className="m-1 fs-5">$41.99</span><span className="m-1 text-decoration-line-through">$69.99</span><span className="m-1 text-uppercase text-warning">(30% off)</span></div>
-                  <div className="row mt-2" ><button className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
-                  <button className="btn btn-buy btn-outline-success col-md-5 m-auto ">Buy</button></div>
-                </div>
               </div>
-              <div className="col-md-4">
-                <div className="card m-auto shadow p-3 product-div w-75 rounded-5">
-                  <div className="text-center">
-                  <a className="btn btn-outline-danger end-0 me-2 position-absolute rounded-5 wishlist" href="#" title="Add to Wishlist">
-                    <i style={{fontSize:"18px"}} className="fa fa-heart-o"></i>
-                  </a>
-                  <img className="product-img" src={p2} alt="My Image" />
+              <div className="col-md-3">
+                  <div className="Home_cat shadow rounded-5">
+                    <div style={{ backgroundImage: `linear-gradient(to right, #00000050, #00000073),url(${p2})`,
+                    height:'420px',width:'auto',
+                    backgroundSize: 'cover',backgroundPosition: 'center', alignItems: 'center',
+                    display: 'flex',borderRadius: '15px',justifyContent: 'center' }}>
+                      <a className="text-decoration-none" href="Products?gender=&category=3&subCategory=&price=0&">
+                        <h3 className="text-white">Accessories</h3></a></div>
                   </div>
-                  <h4 className="m-1">Brand</h4>
-                  <h5 className="m-1">Men's Linen Shirts Short Sleeve</h5>
-                  <div><span className="m-1 fs-5">$41.99</span><span className="m-1 text-decoration-line-through">$69.99</span><span className="m-1 text-uppercase text-warning">(30% off)</span></div>
-                  <div className="row mt-2" ><button className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
-                  <button className="btn btn-buy btn-outline-success col-md-5 m-auto ">Buy</button></div>
-                </div>
               </div>
-              <div className="col-md-4">
-                <div className="card m-auto shadow p-3 product-div w-75 rounded-5">
-                  <div className="text-center">
-                  <a className="btn btn-outline-danger end-0 me-2 position-absolute rounded-5 wishlist" href="#" title="Add to Wishlist">
-                    <i style={{fontSize:"18px"}} className="fa fa-heart-o"></i>
-                  </a>
-                  <img className="product-img" src={p3} alt="My Image" />
+              <div className="col-md-3">
+                  <div className="Home_cat shadow rounded-5">
+                    <div style={{ backgroundImage: `linear-gradient(to right, #00000030, #00000073),url(${p3})`,
+                    height:'420px',width:'auto',
+                    backgroundSize: 'cover',backgroundPosition: 'center', alignItems: 'center',
+                    display: 'flex',borderRadius: '15px',justifyContent: 'center' }}>
+                      <a className="text-decoration-none" href="Products?gender=Men&category=1&subCategory=&price=0&">
+                        <h3 className="text-white">Fashion Men</h3></a></div>
                   </div>
-                  <h4 className="m-1">Brand</h4>
-                  <h5 className="m-1">Men's Linen Shirts Short Sleeve</h5>
-                  <div><span className="m-1 fs-5">$41.99</span><span className="m-1 text-decoration-line-through">$69.99</span><span className="m-1 text-uppercase text-warning">(30% off)</span></div>
-                  <div className="row mt-2" ><button className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
-                  <button className="btn btn-buy btn-outline-success col-md-5 m-auto ">Buy</button></div>
-                </div>
+              </div>
+              <div className="col-md-3">
+                  <div className="Home_cat shadow rounded-5">
+                    <div style={{ backgroundImage: `linear-gradient(to right, #00000050, #00000093),url(${p4})`,
+                    height:'420px',width:'auto',
+                    backgroundSize: 'cover',backgroundPosition: 'center', alignItems: 'center',
+                    display: 'flex',borderRadius: '15px',justifyContent: 'center' }}>
+                      <a className="text-decoration-none" href="Products?gender=Women&category=3&subCategory=15&price=0&">
+                        <h3 className="text-white">Bags</h3></a></div>
+                  </div>
               </div>
             </div>
           </section>

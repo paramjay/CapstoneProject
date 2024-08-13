@@ -1,14 +1,13 @@
 import React, { useState,useEffect } from "react";
 import { Container, Row, Col, Card, Button,Form } from 'react-bootstrap';
-import p1 from "./../images/p1.jpg";
-import p2 from "./../images/p2.jpg";
-import p3 from "./../images/p3.jpg";
+import { getCatDiscount } from "./../utils";
 
 
 const Cart = () => {
   let cartItems = JSON.parse(localStorage.getItem('cartProducts'))||[];
   console.log(cartItems);
  const taxRate = 0.08; // 8% tax rate
+ const [CategoryDiscounts, setCategoryDiscounts] = useState([]);
 
   const [subtotal, setSubtotal] = useState(cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
   const [promoDiscount, setPromoDiscount] = useState(JSON.parse(localStorage.getItem('promo'))||'');
@@ -34,10 +33,14 @@ const Cart = () => {
   const removeFromCart = (item) => {
     // localStorage.removeItem('cartProducts');
     let cartProducts = JSON.parse(localStorage.getItem('cartProducts'))||[];
-    console.log(cartProducts);
+    // console.log(cartProducts);
     cartProducts=cartProducts.filter(data => data.id !== item.id);
     localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
-    console.log("modified-",localStorage.getItem('cartProducts'))
+    if(cartProducts.length<1){
+      localStorage.removeItem('cartProducts');
+      localStorage.removeItem('promo');
+    }
+    // console.log("modified-",localStorage.getItem('cartProducts'))
     window.location.reload();
       
   };
@@ -64,7 +67,12 @@ const Cart = () => {
     }
       
   };
-
+  const fetchData = async () => {
+    setCategoryDiscounts(await getCatDiscount());
+  }
+  useEffect(() => {
+    fetchData();
+  },[]);
   return (
     <Container className="mt-5">
       <h2 className="mb-4">Shopping Cart <i class="fa fa-shopping-cart"></i></h2>
@@ -95,6 +103,17 @@ const Cart = () => {
           <Card>
             <Card.Body>
               <Card.Title>Summary <i class="fa fa-file-text-o"></i></Card.Title>
+              {/* {cartItems.map((item) => (
+                CategoryDiscounts.map((catDis) => (
+                  catDis.category.name==item.category.category.name ? (
+                                    <>
+                  <Card.Text>Discount on category- {catDis.category.name}{catDis.discount}%</Card.Text>
+                  </>
+                                  ) : (
+                                    <span className="m-1 price">${item.price}</span>
+                                  )
+                ))
+              ))} */}
               <Card.Text>Subtotal: ${subtotal.toFixed(2)}</Card.Text>
               {promoDiscount!="" ? (
                 <>
@@ -103,6 +122,7 @@ const Cart = () => {
                 <Card.Text>Total before tax : {promoDiscount.remaining}</Card.Text>
                 </>):(<></>)
               }
+                
               <Card.Text>Tax (8%): ${tax.toFixed(2)}</Card.Text>
               <Card.Text>Total: ${total.toFixed(2)}</Card.Text>
               

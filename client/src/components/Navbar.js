@@ -11,13 +11,13 @@ export default function NavBar(props) {
       <Navbar.Collapse id="issue-navbar-nav" className="">
       <NavLink NavLink  title="Home Page" className="nav-link p-2" to="/">Home</NavLink>
       <NavLink NavLink  title="Products" className="nav-link p-2" to="/Products">Products</NavLink>
-      <NavLink className="nav-link p-2" to="/Wish-list">Wishlist</NavLink>
-      <NavLink NavLink  title="Cart" className="nav-link p-2" to="/Cart">Cart</NavLink>
-      <NavLink NavLink  title="Checkout" className="nav-link p-2" to="/Checkout">Checkout</NavLink>
       
       {props.LoggedInUser.role === "Admin" ? (
         <>
         {/* <NavLink NavLink  title="Add Product" className="nav-link p-2" to="/AddProduct">Add Product</NavLink> */}
+              <NavLink className="nav-link p-2" to="/Wish-list">Wishlist</NavLink>
+              <NavLink NavLink  title="Cart" className="nav-link p-2" to="/Cart">Cart</NavLink>
+              <NavLink NavLink  title="Checkout" className="nav-link p-2" to="/Checkout">Checkout</NavLink>
         <NavLink NavLink  title="Dashboard" className="nav-link p-2" to="/ProductDashboard">Dashboard</NavLink>
         {/* <NavLink NavLink  title="User Dashboard" className="nav-link p-2" to="/UserDashboard">User Dashboard</NavLink> */}
         </>
@@ -25,6 +25,8 @@ export default function NavBar(props) {
         <>
               <NavLink className="nav-link p-2" to="/Wish-list">Wishlist</NavLink>
               <NavLink NavLink  title="Cart" className="nav-link p-2" to="/Cart">Cart</NavLink>
+              <NavLink NavLink  title="Checkout" className="nav-link p-2" to="/Checkout">Checkout</NavLink>
+      
         </>
        ) : (<></>)}
        <div className="w-100">

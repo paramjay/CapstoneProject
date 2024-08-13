@@ -38,6 +38,7 @@ export default function UserDashboard() {
                 <a className="m-2 btn btn-outline-primary " href="/SubCategory">Sub-Category</a>
                 <a className="m-2 btn btn-outline-primary" href="/ProductDashboard">Products</a>
                 <a className="m-2 btn btn-outline-primary active" href="/UserDashboard">Users</a>
+                <a className="m-2 btn btn-outline-primary " href="/SalesDashboard">Sales</a>
             </div>
             <h3 className="mt-3 mb-3">User Dashboard</h3>
             <Table id="userTable" striped bordered hover responsive>

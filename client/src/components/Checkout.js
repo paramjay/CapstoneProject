@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { Row, Col, Form, Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { addCheckout } from "../utils";
+import { addCheckout,getCatDiscount  } from "../utils";
 
 export default function Checkout() {
     const [cartItems] = useState(JSON.parse(localStorage.getItem('cartProducts'))||[]);
@@ -9,6 +9,8 @@ export default function Checkout() {
     const navigate = useNavigate();
     const taxRate = 0.08; // 8% tax rate
 
+    
+    const [CategoryDiscounts, setCategoryDiscounts] = useState([]); 
     const [subtotal, setSubtotal] = useState(cartItems.reduce((total, item) => total + item.price * item.quantity, 0));
     const [promoDiscount, setPromoDiscount] = useState(JSON.parse(localStorage.getItem('promo'))||'');
     
@@ -64,11 +66,16 @@ export default function Checkout() {
         fields.forEach(field => delete newObj[field]);
         return newObj;
       };
+      
+  const fetchData = async (graphQLParams) => {  
+    setCategoryDiscounts(await getCatDiscount());
+    };
       useEffect(() => {
+        fetchData();
         let getUser = JSON.parse(localStorage.getItem('token'))||null;
         
         // console.log(promoDiscount);
-        const fieldsToRemove = ['description', 'gender', 'brand','image','stock'];
+        const fieldsToRemove = ['description', 'gender', 'brand','image','stock','category'];
 
         const newCartItems = cartItems.map(product => removeFields(product, fieldsToRemove));
         setFormData({ ...formData, ["cart"]: newCartItems,["user"]:getUser.id });
@@ -181,7 +188,7 @@ export default function Checkout() {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
+              <label htmlFor="email">Email</label>
               <input type="email" className="form-control" id="email" disabled value={user.email} />
               <div className="invalid-feedback">Please enter a valid email address for shipping updates.</div>
             </div>
@@ -280,14 +287,29 @@ export default function Checkout() {
             <span className="badge badge-secondary badge-pill">{cartItems.length}</span>
           </h4>
           <ul className="list-group mb-3">
-            {cartItems.map(item => (
+            {cartItems.map(item => 
+            CategoryDiscounts.map((catDis) => (
+              catDis.category.name==item.category.name ? (
+                  <>
+                  <li key={item.id} className="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                      <h6 className="my-0">{item.name}</h6>
+                    </div>
+                    <div>{catDis.discount}% Off</div>
+                    <span className="text-muted">${item.price} x ({item.quantity})</span>
+                  </li>
+                  </>
+                ) :
+            (
+              
               <li key={item.id} className="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
                   <h6 className="my-0">{item.name}</h6>
                 </div>
                 <span className="text-muted">${item.price} x ({item.quantity})</span>
               </li>
-            ))}
+             
+            ))))}
             <li className="list-group-item d-flex justify-content-between">
                 <div>
                   <span className="my-0">Sub-Total:</span>
@@ -317,11 +339,11 @@ export default function Checkout() {
                 </>):(<></>)
               }
             <li className="list-group-item d-flex justify-content-between">
-              <span>Tax (CAD)</span>
+              <span>Tax (8%):</span>
               <strong>${tax.toFixed(2)}</strong>
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              <span>Total (CAD)</span>
+              <span>Total :</span>
               <strong>${total.toFixed(2)}</strong>
             </li>
           </ul>

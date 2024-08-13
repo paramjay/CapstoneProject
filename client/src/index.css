@@ -55,7 +55,16 @@ footer{
 footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 20px;
 }
+.mobile{
+  margin: 2rem!important;
+}
+.mobile-left{
+  margin-left: 2rem!important;
+}
 
+.mobile-right{
+  margin-right: 2rem!important;
+}
 .col{
   padding: 0;
 }
@@ -84,6 +93,10 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   background-position: center;
   height: 500px;
 }
+.Home_cat:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s;
+}
 #sale-banner{
   background: url('images/banner3.png');
   background-size: cover;
@@ -92,6 +105,7 @@ footer h1,footer h2,footer h3,footer h4,footer h5,footer h6{
   margin-top: 50px;
 }
 .product-img{
+  border-radius: 15px;
  height: 425px;
  width: -webkit-fill-available;
 }
@@ -249,6 +263,17 @@ footer .menu-item a:hover{
   .search-box{
     display: none!important; 
   }
+  .mobile{
+    margin: 0!important;
+  }
+  
+.mobile-left{
+  margin-left: 0!important;
+}
+
+.mobile-right{
+  margin-right: 0!important;
+}
 }
 
 .wishlist-card {
@@ -301,15 +326,4 @@ footer .menu-item a:hover{
 }
  
 
-/* Responsive Styles for Wishlist */
-@media only screen and (max-width: 768px) {
-  .wishlist-img {
-    /* height: 150px; */
-  }
-}
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .wishlist-img {
-    /* height: 250px; */
-  }
-}

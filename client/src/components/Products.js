@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
-import { AddtoWishlist,getProducts,getCategory,getSubCategoryByCategoryId,graphQLCommand } from "./../utils";
+import { AddtoWishlist,getCatDiscount,getCategory,getSubCategoryByCategoryId,graphQLCommand } from "./../utils";
 import { useNavigate,useSearchParams } from "react-router-dom";
 
 export default function Products() {
@@ -21,6 +21,8 @@ export default function Products() {
     };
     const graphQLParams = convertSearchParamsToGraphQLParams(searchParams);
   
+    const [CategoryDiscounts, setCategoryDiscounts] = useState([]); 
+
   const [ProductsList, setProductsList] = useState([]); 
   const [filterQuery, setFilterQuery] = useState({
     gender:"",
@@ -30,6 +32,7 @@ export default function Products() {
   }); 
 
   const fetchData = async (graphQLParams) => {  
+    setCategoryDiscounts(await getCatDiscount());
       let query_type = "";
       if (graphQLParams === "") {
         query_type = `getProducts`;
@@ -42,6 +45,9 @@ export default function Products() {
       const query = `query {
         ${query_type} {
             id
+            category{
+                name
+            }
             name
             brand
             stock
@@ -88,7 +94,13 @@ export default function Products() {
         navigate(`/Products?${text}`);
       };
 
-      const addToCart = (item) => {
+      
+      const buy = async (item,price) => {
+        await addToCart(item,price);
+        navigate('/Checkout');
+        
+      };
+      const addToCart = (item,price) => {
         
         let promo = JSON.parse(localStorage.getItem('promo'))||'';
         if(promo){
@@ -97,6 +109,7 @@ export default function Products() {
         }
         let cartProducts = JSON.parse(localStorage.getItem('cartProducts'))||[];
         console.log(cartProducts);
+        item.price=price.toString();
         if(!cartProducts.length>0){
             console.log("empty");
             item={...item,quantity:1}
@@ -143,11 +156,11 @@ export default function Products() {
     }, [graphQLParams]);
   
   return (
+    <div className="mobile">
     <div className="m-3">
     <div className='row'>
-        
-        <div className="col-md-2 m-2 ms-3 p-2 border-end">
-        <div><h2>Filters <i className='fa fa-filter'></i></h2></div>
+        <div className=" col-md-2 mobile-right p-2 border-end">
+        <div className="destop" ><h2>Filters <i className='fa fa-filter'></i></h2></div>
             <Form id="FilterForm">
                 <Form.Group className="mb-3 d-grid" controlId="form_gender">
                     <Form.Label>Products for :</Form.Label>
@@ -192,9 +205,9 @@ export default function Products() {
             </Form>
             
         </div>
-        <section className="p-2 m-2 col-md-9 " id="latest-offers">
+        <section className="p-2  col-md-9 mobile-left" id="latest-offers">
                 <h2 className="">Exclusive Offers:-</h2>
-                <div className="row mt-4 ms-2 ">
+                <div className="row mt-4   ">
                 {ProductsList.map((item) => (
                     <div className="col-md-4 mt-2" key={item.id}>
                         <div className="card m-auto shadow p-3 product-div rounded-5 w-100">
@@ -206,17 +219,37 @@ export default function Products() {
                         </div>
                         <h4 className="m-1">{item.brand}</h4>
                         <h5 className="m-1">{item.name}</h5>
-                        <div>
-                            <span className="m-1 fs-5">${item.price}</span>
+                        
+                            {/* <span className="m-1 fs-5">${item.price}</span> */}
+                            {CategoryDiscounts.map((catDis) => (
+                                catDis.category.name==item.category.name ? (
+                                    <>
+                                    <div>
+                                    <span className="m-1 text-decoration-line-through">${item.price}</span>
+                                    <span className="m-1 price">${item.price*((100-catDis.discount)/100)}</span>
+                                    <span className="fw-medium m-1 text-success">{catDis.discount}% Off</span>
+                                    </div>
+                                    <div className="row mt-2" ><button  onClick={() => addToCart(item,item.price*((100-catDis.discount)/100))} type="button" className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
+                                    <button className="btn btn-buy btn-outline-success col-md-5 m-auto " onClick={() => buy(item,item.price*((100-catDis.discount)/100))}>Buy</button></div>
+                                    </>
+                                  ) : (
+                                    <>
+                                    <div>
+                                        <span className="m-1 price">${item.price}</span>
+                                    </div>
+                                    <div className="row mt-2" ><button  onClick={() => addToCart(item,item.price)} type="button" className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
+                                    <button className="btn btn-buy btn-outline-success col-md-5 m-auto " onClick={() => buy(item,item.price)}>Buy</button></div>
+                                    </>
+                                  )
+                            ))}
                             {/* <span className="m-1 text-decoration-line-through">${item.salePrice}</span> */}
-                        </div>
-                        <div className="row mt-2" ><button  onClick={() => addToCart(item)} type="button" className="btn btn-cart btn-outline-primary col-md-5 m-auto">Add to Cart</button>
-                        <button className="btn btn-buy btn-outline-success col-md-5 m-auto ">Buy</button></div>
+                        
                         </div>
                     </div>
                 ))}
             </div>
         </section>
+    </div>
     </div>
     </div>
   );

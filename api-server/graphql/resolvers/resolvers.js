@@ -11,6 +11,7 @@ import { Wishlist } from "../../models/WishList.js";
 import { getMaxId } from "../../utils/utils.js";
 import { Checkout } from '../../models/CheckoutModel.js';
 import { Cart } from '../../models/CartModel.js';
+import { CatDiscount } from '../../models/CatDiscount.js';
 
 // Define resolvers 
 const resolvers = {
@@ -107,19 +108,43 @@ const resolvers = {
       }
 
       console.log(query)
-      const products = await Product.find(query);
+      const products = await Product.find(query).populate('category');
       return products;
     },
     getWishlistByUserId: async (_, { input }) => {
       try {
         const user = await User.find({id:input});
-        const wishlist = await Wishlist.find({user}).populate('product').exec();
+        const wishlist = await Wishlist.find({user}).populate({
+          path: 'product',
+          populate: {
+            path: 'category',
+            model: 'Category'
+          }
+        }).exec();
         console.log(wishlist);
         return wishlist;
       } catch (error) {
+        console.error(error)
         throw new Error('Error fetching Wishlist');
       }
     },
+    getCatDiscount: async () => {
+      try {
+        const catDiscount = await CatDiscount.find({}).populate('category');
+        return catDiscount;
+      } catch (error) {
+        throw new Error('Error fetching Categories');
+      }
+    },
+    getAllBills: async () => {
+      try {
+        const checkouts = await Checkout.find({}).populate('user');
+        return checkouts;
+      } catch (error) {
+        throw new Error('Error fetching Categories');
+      }
+    },
+    
   },
   Mutation: {
     registerCategory: async (_, { input }) => {
@@ -382,7 +407,7 @@ const resolvers = {
         total:input.total,
         promoCode:input.promoCode,
         promoDiscount:input.promoDiscount,
-        categoryDiscount:input.categoryDiscount,
+        categoryDiscount:input.categoryDiscount
       });
 
       try {
@@ -412,7 +437,36 @@ const resolvers = {
       return "Thank you for your purchase & stay tuned for upcoming Fashion Sales!";
       
     },
-    
+    addCatDiscount: async (_, { input }) => {
+      // console.log(input);
+
+      // Validate input fields
+      if (!input.discount || !input.category ) {
+        throw new Error('All fields are required.');
+      }
+
+      // Check if user with the same email already exists
+      const category = await Category.findOne({ id: parseInt(input.category) });
+      await CatDiscount.deleteMany();
+      // var new_id=await getMaxId(CatDiscount)+1;
+      
+      // Create new Checkout
+      let newCatDiscount = new CatDiscount({
+        id: 1,
+        discount:input.discount,
+        category:category,
+      });
+
+      try {
+        // console.log('Attempting to save new Discount:', newCatDiscount);
+        newCatDiscount=await newCatDiscount.save();
+        return "Category Discount added Successfully!";
+      } catch (error) {
+        console.error('Error creating new Checkout:', error);
+        throw new Error(`Error creating new Checkout: ${error.message}`);
+      }
+      
+    }
   },
 };
 

@@ -237,6 +237,9 @@ export const getWishlistByUserId = async (input) => {
     id
     product {
         id
+        category {
+          name
+        }
         name
         brand
         stock
@@ -272,4 +275,32 @@ export const addCheckout = async (input) => {
     return null;
   }
   return data.data;
+};
+
+
+export const getCatDiscount = async () => {
+  const query = `query Query {
+    getCatDiscount {
+      id
+      discount
+      category {
+        name
+      }
+    }
+  }`;
+  const data = await graphQLCommand(query);
+  return data.getCatDiscount;
+};
+
+
+export const addCategoryDiscount = async (input) => {
+  const query = `mutation AddCatDiscount($input: CatDiscountInput!) {
+      addCatDiscount(input: $input)
+    }`;
+    const data = await graphQLCommand2(query, { input });
+    if(data.errors){
+      alert(data.errors[0].message);
+      return null;
+    }
+    return data.data;
 };

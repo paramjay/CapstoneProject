@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Container, Button, Row, Col, Card } from "react-bootstrap";
-import { getWishlistByUserId,removeWishlist } from "./../utils";
+import { getWishlistByUserId,removeWishlist,getCatDiscount  } from "./../utils";
 import { useNavigate } from "react-router-dom";
 
 
@@ -8,9 +8,16 @@ export default function Wishlist() {
   const [user, setUser] = useState();
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
-  const addToCart = (item) => {
+  const [CategoryDiscounts, setCategoryDiscounts] = useState([]); 
+  const addToCart = (item,price) => {
+    let promo = JSON.parse(localStorage.getItem('promo'))||'';
+    if(promo){
+        alert("Add your Promo Code again.")
+        localStorage.removeItem('promo');
+    }
     let cartProducts = JSON.parse(localStorage.getItem('cartProducts'))||[];
     console.log(cartProducts);
+    item.price=price.toString();
     if(!cartProducts.length>0){
         console.log("empty");
         item={...item,quantity:1}
@@ -47,6 +54,7 @@ export default function Wishlist() {
     fetchData(user);
   };
   const fetchData = async (user) => {  
+    setCategoryDiscounts(await getCatDiscount());
     console.log(user);
     const data = await getWishlistByUserId(user.id);
     console.log(data);
@@ -75,13 +83,33 @@ export default function Wishlist() {
               </div>
               <Card.Body className="p-2">
                 <Card.Title>{item.product.name}</Card.Title>
-                <Card.Text>
-                  <span className="price">${item.product.price}</span>
-                </Card.Text>
-                <Row>
-                  <Col md={12} lg={6} sm={12}><Button variant="primary" onClick={() => addToCart(item.product)} className="w-100 m-1" >Add to Cart</Button></Col>
-                  <Col md={12} lg={6} sm={12}><Button variant="danger" onClick={() => removeFromWishlist(item.id)}  className="w-100 m-1" >Remove</Button></Col>
-                </Row>
+                {CategoryDiscounts.map((catDis) => (
+                    catDis.category.name==item.product.category.name ? (
+                      <>
+                        <Card.Text>
+                        <span className="m-1 text-decoration-line-through">${item.product.price}</span>
+                        <span className="m-1 price">${item.product.price*((100-catDis.discount)/100)}</span>
+                        <span className="fw-medium m-1 text-success">{catDis.discount}% Off</span>
+                        </Card.Text>
+                        <Row>
+                          <Col md={12} lg={6} sm={12}><Button variant="primary" onClick={() => addToCart(item.product,item.product.price*((100-catDis.discount)/100))} className="w-100 m-1" >Add to Cart</Button></Col>
+                          <Col md={12} lg={6} sm={12}><Button variant="danger" onClick={() => removeFromWishlist(item.id)}  className="w-100 m-1" >Remove</Button></Col>
+                        </Row>
+                      </>
+                      ) : (
+                        <>
+                        <Card.Text>
+                        <span className="m-1 price">${item.product.price}</span>
+                        </Card.Text>
+                        <Row>
+                          <Col md={12} lg={6} sm={12}><Button variant="primary" onClick={() => addToCart(item.product,item.product.price)} className="w-100 m-1" >Add to Cart</Button></Col>
+                          <Col md={12} lg={6} sm={12}><Button variant="danger" onClick={() => removeFromWishlist(item.id)}  className="w-100 m-1" >Remove</Button></Col>
+                        </Row>
+                        </>
+                      )
+                  ))}
+                  {/* <span className="price">${item.product.price}</span> */}
+                
                 
                 
               </Card.Body>

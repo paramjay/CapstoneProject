@@ -75,6 +75,7 @@ export default function SubCategory() {
             <a className="m-2 btn btn-outline-primary active" href="/SubCategory">Sub-Category</a>
             <a className="m-2 btn btn-outline-primary " href="/ProductDashboard">Products</a>
             <a className="m-2 btn btn-outline-primary " href="/UserDashboard">Users</a>
+            <a className="m-2 btn btn-outline-primary " href="/SalesDashboard">Sales</a>
         </div>
       <div id="" className="">
         <h3 className="mb-2 mt-3">Add Sub-Category:-</h3>

@@ -16,6 +16,7 @@ import EditProduct from "./components/EditProduct";
 import Category from "./components/Category";
 import SubCategory from "./components/SubCategory";
 import Checkout from "./components/Checkout";
+import SalesDashboard from "./components/SalesDashboard";
 
 
 function App() {
@@ -48,10 +49,8 @@ function App() {
             <Route path="Login" element={<Login LoggedInUser={LoggedInUser} setLoggedInUser={setLoggedInUser} />}/>
             <Route path="SignUp" element={<SignUp />}/>
             <Route path="Products" element={<Products />}/>
-            <Route path="Cart" element={<Cart />} />
             <Route path="Wish-list" element={<Wishlist />} />
             <Route path="Checkout" element={<Checkout />} />
-            
             
             {LoggedInUser.role === "Admin" ? (
                 <>
@@ -63,13 +62,13 @@ function App() {
                   <Route path="EditProduct/:id" element={<EditProduct />} />
                   <Route path="Cart" element={<Cart />} />
                   <Route path="Wish-list" element={<Wishlist />} />
+                  <Route path="SalesDashboard" element={<SalesDashboard />} />
                 </>
               ) : LoggedInUser.role === "Buyer" ? (
                 <>
                   {/* <Route path="Product" element={<AddProduct />}/> */}
                   <Route path="Wish-list" element={<Wishlist />} />
                   <Route path="Cart" element={<Cart />} />
-
                   {/* <Route path="ProductDashboard" element={<ProductDashboard />}/> */}
                 </>
               ) :(<></>)

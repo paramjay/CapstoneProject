@@ -42,6 +42,7 @@ export default function ProductDashboard() {
                 <a className="m-2 btn btn-outline-primary " href="/SubCategory">Sub-Category</a>
                 <a className="m-2 btn btn-outline-primary active" href="/ProductDashboard">Products</a>
                 <a className="m-2 btn btn-outline-primary " href="/UserDashboard">Users</a>
+                <a className="m-2 btn btn-outline-primary " href="/SalesDashboard">Sales</a>
             </div>
             
             <Row> <Col><h3 className="mt-3 mb-3">Product Dashboard</h3> </Col>
